@@ -11,6 +11,9 @@ import uuid
 from datetime import datetime
 from pprint import pprint, pformat
 
+import requests.packages.urllib3
+requests.packages.urllib3.disable_warnings()
+
 import numpy as np
 
 from Bio import SeqIO
