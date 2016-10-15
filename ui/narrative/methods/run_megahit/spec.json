@@ -2,7 +2,8 @@
 	"ver": "1.0.4",
 	
 	"authors": [
-		"msneddon"
+		"msneddon",
+		"dylan"
 	],
 	"contact": "help@kbase.us",
 	"visible": true,
@@ -13,14 +14,14 @@
 	},
 	"parameters": [ 
 		{
-			"id": "read_library_name",
+			"id": "input_reads_name",
 			"optional": false,
 			"advanced": false,
 			"allow_multiple": false,
 			"default_values": [ "" ],
 			"field_type": "text",
 			"text_options": {
-				"valid_ws_types": ["KBaseAssembly.PairedEndLibrary","KBaseFile.PairedEndLibrary"]
+				"valid_ws_types": ["KBaseAssembly.PairedEndLibrary","KBaseFile.PairedEndLibrary", "KBaseSets.ReadsSet" ]
 			}
 		},
 		{
@@ -33,6 +34,18 @@
 		    "text_options" : {
 		     	"valid_ws_types" : [ "KBaseGenomeAnnotations.Assembly" ],
 		    	"is_output_name":true
+		    }
+		},
+		{
+		    "id" : "co_assembly_flag",
+		    "optional" : false,
+		    "advanced" : false,
+		    "allow_multiple" : false,
+		    "default_values" : [ "1" ],
+		    "field_type" : "checkbox",
+		    "checkbox_options" : {
+		        "checked_value": "1",
+		        "unchecked_value": "0"
 		    }
 		},
 		{

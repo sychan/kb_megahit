@@ -45,9 +45,10 @@ module MEGAHIT {
 	*/
 	typedef structure {
 		string workspace_name;
-		string read_library_name;
+		/*string read_library_name;*/
+		string input_reads_name;
 		string output_contigset_name;
-
+		int co_assembly_flag;  /* 1=True, 0=False, def: 1 */
 		string megahit_parameter_preset;
 
 		int min_count;
@@ -61,7 +62,7 @@ module MEGAHIT {
 
 	typedef structure {
 		string report_name;
-        string report_ref;
+		string report_ref;
 	} MegaHitOutput;
 
 	funcdef run_megahit(MegaHitParams params) returns (MegaHitOutput output)
