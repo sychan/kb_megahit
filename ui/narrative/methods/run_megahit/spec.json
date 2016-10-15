@@ -37,7 +37,7 @@
 		    }
 		},
 		{
-		    "id" : "co_assembly_flag",
+		    "id" : "combined_assembly_flag",
 		    "optional" : false,
 		    "advanced" : false,
 		    "allow_multiple" : false,

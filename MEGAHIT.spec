@@ -48,7 +48,7 @@ module MEGAHIT {
 		/*string read_library_name;*/
 		string input_reads_name;
 		string output_contigset_name;
-		int co_assembly_flag;  /* 1=True, 0=False, def: 1 */
+		int combined_assembly_flag;  /* 1=True, 0=False, def: 1 */
 		string megahit_parameter_preset;
 
 		int min_count;

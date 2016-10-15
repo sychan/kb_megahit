@@ -33,8 +33,8 @@ parameters :
     output_contigset_name:
         ui-name : Output Assembly name
         short-hint : Enter a name for the assembled contigs data object
-    co_assembly_flag:
-        ui-name : Co-assemble?
+    combined_assembly_flag:
+        ui-name : Combined assembly?
         short-hint : For ReadsSet input, combine reads in assembly.  Otherwise, create separate Contigs data objects
     megahit_parameter_preset:
         ui-name : Parameter preset
