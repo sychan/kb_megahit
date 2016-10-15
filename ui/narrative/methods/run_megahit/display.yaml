@@ -1,9 +1,9 @@
 #
 # define display information
 #
-name: MEGAHIT - Assemble metagneomic reads
+name: Assemble with MEGAHIT
 tooltip: |
-	Run MEGAHIT for metagenome assembly
+	Assemble metagenomic reads using the MEGAHIT assembler.
 screenshots: []
 
 icon: megahit-blue.png
@@ -31,7 +31,7 @@ parameters :
         ui-name : Read Library
         short-hint : Read library (only PairedEnd Libs supported now)
     output_contigset_name:
-        ui-name : Output ContigSet name
+        ui-name : Output Assembly name
         short-hint : Enter a name for the assembled contigs data object
     megahit_parameter_preset:
         ui-name : Parameter preset
