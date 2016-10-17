@@ -35,7 +35,7 @@ parameters :
         short-hint : Enter a name for the assembled contigs data object
     combined_assembly_flag:
         ui-name : Combined assembly?
-        short-hint : For ReadsSet input, combine reads in assembly.  Otherwise, create separate Contigs data objects
+        short-hint : For ReadsSet input, combine reads in assembly.  Otherwise, create separate Contigs data objects for each Reads Library
     megahit_parameter_preset:
         ui-name : Parameter preset
         short-hint : Select a MEGAHIT parameter preset

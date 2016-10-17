@@ -15,36 +15,42 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 /**
  * <p>Original spec-file type: MegaHitParams</p>
  * <pre>
- * Run MEGAHIT.  Most parameters here are just passed forward to MEGAHIT
- * workspace_name - the name of the workspace for input/output
- * read_library_name - the name of the PE read library (SE library support in the future)
- * output_contig_set_name - the name of the output contigset
- * megahit_parameter_preset - 
- *         override a group of parameters; possible values:
- *             meta            '--min-count 2 --k-list 21,41,61,81,99'
- *             (generic metagenomes, default)
- *             meta-sensitive  '--min-count 2 --k-list 21,31,41,51,61,71,81,91,99'
- *             (more sensitive but slower)
- *             meta-large      '--min-count 2 --k-list 27,37,47,57,67,77,87'
- *             (large & complex metagenomes, like soil)
- *             bulk            '--min-count 3 --k-list 31,51,71,91,99 --no-mercy'
- *             (experimental, standard bulk sequencing with >= 30x depth)
- *             single-cell     '--min-count 3 --k-list 21,33,55,77,99,121 --merge_level 20,0.96'
- *             (experimental, single cell data)
- * min_count - minimum multiplicity for filtering (k_min+1)-mers, default 2
- *             min_k - minimum kmer size (<= 127), must be odd number, default 21
- *             max_k - maximum kmer size (<= 127), must be odd number, default 99
- *         k_step - increment of kmer size of each iteration (<= 28), must be even number, default 10
- *         k_list - list of kmer size (all must be odd, in the range 15-127, increment <= 28);
- *  override `--k-min', `--k-max' and `--k-step'
- * min_contig_length - minimum length of contigs to output, default 200
- * @optional megahit_parameter_preset
- * @optional min_count
- * @optional k_min
- * @optional k_max
- * @optional k_step
- * @optional k_list
- * @optional min_contig_len
+ * run_megahit()
+ *             Run MEGAHIT.  Most parameters here are just passed forward to MEGAHIT
+ *             run_megahit() is responsible for accepting input params from Narrative, 
+ *                 calling exec_megahit(), and generating report.  
+ *                 It mediates communication with the Narrative
+ *             workspace_name - the name of the workspace for input/output
+ *             read_library_name - the name of the PE read library (SE library support in the future)
+ *             output_contig_set_name - the base name of the output contigset or AssemblySet
+ *             combined_assembly_flag - if input is a ReadsSet, indicate combined Assembly
+ *             megahit_parameter_preset - override a group of parameters; possible values:
+ *                 
+ *                 meta            '--min-count 2 --k-list 21,41,61,81,99'
+ *                                 (generic metagenomes, default)
+ *                 meta-sensitive  '--min-count 2 --k-list 21,31,41,51,61,71,81,91,99'
+ *                                  (more sensitive but slower)
+ *                 meta-large      '--min-count 2 --k-list 27,37,47,57,67,77,87'
+ *                                 (large & complex metagenomes, like soil)
+ *                 bulk            '--min-count 3 --k-list 31,51,71,91,99 --no-mercy'
+ *                                 (experimental, standard bulk sequencing with >= 30x depth)
+ *                 single-cell     '--min-count 3 --k-list 21,33,55,77,99,121 --merge_level 20,0.96'
+ *                                 (experimental, single cell data)
+ *              min_count - minimum multiplicity for filtering (k_min+1)-mers, default 2
+ *                  min_k - minimum kmer size (<= 127), must be odd number, default 21
+ *                  max_k - maximum kmer size (<= 127), must be odd number, default 99
+ *              k_step - increment of kmer size of each iteration (<= 28), must be even number, default 10
+ *              
+ *              k_list - list of kmer size (all must be odd, in the range 15-127, increment <= 28);
+ *                  overrides '--k-min', '--k-max', and '--k-step'
+ *              min_contig_length - minimum length of contigs to output, default 200
+ *              @optional megahit_parameter_preset
+ *              @optional min_count
+ *              @optional k_min
+ *              @optional k_max
+ *              @optional k_step
+ *              @optional k_list
+ *              @optional min_contig_len
  * </pre>
  * 
  */
@@ -52,8 +58,9 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 @Generated("com.googlecode.jsonschema2pojo")
 @JsonPropertyOrder({
     "workspace_name",
-    "read_library_name",
+    "input_reads_name",
     "output_contigset_name",
+    "combined_assembly_flag",
     "megahit_parameter_preset",
     "min_count",
     "k_min",
@@ -66,10 +73,12 @@ public class MegaHitParams {
 
     @JsonProperty("workspace_name")
     private String workspaceName;
-    @JsonProperty("read_library_name")
-    private String readLibraryName;
+    @JsonProperty("input_reads_name")
+    private String inputReadsName;
     @JsonProperty("output_contigset_name")
     private String outputContigsetName;
+    @JsonProperty("combined_assembly_flag")
+    private java.lang.Long combinedAssemblyFlag;
     @JsonProperty("megahit_parameter_preset")
     private String megahitParameterPreset;
     @JsonProperty("min_count")
@@ -101,18 +110,18 @@ public class MegaHitParams {
         return this;
     }
 
-    @JsonProperty("read_library_name")
-    public String getReadLibraryName() {
-        return readLibraryName;
+    @JsonProperty("input_reads_name")
+    public String getInputReadsName() {
+        return inputReadsName;
     }
 
-    @JsonProperty("read_library_name")
-    public void setReadLibraryName(String readLibraryName) {
-        this.readLibraryName = readLibraryName;
+    @JsonProperty("input_reads_name")
+    public void setInputReadsName(String inputReadsName) {
+        this.inputReadsName = inputReadsName;
     }
 
-    public MegaHitParams withReadLibraryName(String readLibraryName) {
-        this.readLibraryName = readLibraryName;
+    public MegaHitParams withInputReadsName(String inputReadsName) {
+        this.inputReadsName = inputReadsName;
         return this;
     }
 
@@ -128,6 +137,21 @@ public class MegaHitParams {
 
     public MegaHitParams withOutputContigsetName(String outputContigsetName) {
         this.outputContigsetName = outputContigsetName;
+        return this;
+    }
+
+    @JsonProperty("combined_assembly_flag")
+    public java.lang.Long getCombinedAssemblyFlag() {
+        return combinedAssemblyFlag;
+    }
+
+    @JsonProperty("combined_assembly_flag")
+    public void setCombinedAssemblyFlag(java.lang.Long combinedAssemblyFlag) {
+        this.combinedAssemblyFlag = combinedAssemblyFlag;
+    }
+
+    public MegaHitParams withCombinedAssemblyFlag(java.lang.Long combinedAssemblyFlag) {
+        this.combinedAssemblyFlag = combinedAssemblyFlag;
         return this;
     }
 
@@ -248,7 +272,7 @@ public class MegaHitParams {
 
     @Override
     public String toString() {
-        return ((((((((((((((((((((((("MegaHitParams"+" [workspaceName=")+ workspaceName)+", readLibraryName=")+ readLibraryName)+", outputContigsetName=")+ outputContigsetName)+", megahitParameterPreset=")+ megahitParameterPreset)+", minCount=")+ minCount)+", kMin=")+ kMin)+", kMax=")+ kMax)+", kStep=")+ kStep)+", kList=")+ kList)+", minContigLen=")+ minContigLen)+", additionalProperties=")+ additionalProperties)+"]");
+        return ((((((((((((((((((((((((("MegaHitParams"+" [workspaceName=")+ workspaceName)+", inputReadsName=")+ inputReadsName)+", outputContigsetName=")+ outputContigsetName)+", combinedAssemblyFlag=")+ combinedAssemblyFlag)+", megahitParameterPreset=")+ megahitParameterPreset)+", minCount=")+ minCount)+", kMin=")+ kMin)+", kMax=")+ kMax)+", kStep=")+ kStep)+", kList=")+ kList)+", minContigLen=")+ minContigLen)+", additionalProperties=")+ additionalProperties)+"]");
     }
 
 }

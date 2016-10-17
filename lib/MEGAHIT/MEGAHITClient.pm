@@ -124,8 +124,9 @@ $params is a MEGAHIT.MegaHitParams
 $output is a MEGAHIT.MegaHitOutput
 MegaHitParams is a reference to a hash where the following keys are defined:
 	workspace_name has a value which is a string
-	read_library_name has a value which is a string
+	input_reads_name has a value which is a string
 	output_contigset_name has a value which is a string
+	combined_assembly_flag has a value which is an int
 	megahit_parameter_preset has a value which is a string
 	min_count has a value which is an int
 	k_min has a value which is an int
@@ -147,8 +148,9 @@ $params is a MEGAHIT.MegaHitParams
 $output is a MEGAHIT.MegaHitOutput
 MegaHitParams is a reference to a hash where the following keys are defined:
 	workspace_name has a value which is a string
-	read_library_name has a value which is a string
+	input_reads_name has a value which is a string
 	output_contigset_name has a value which is a string
+	combined_assembly_flag has a value which is an int
 	megahit_parameter_preset has a value which is a string
 	min_count has a value which is an int
 	k_min has a value which is an int
@@ -217,6 +219,116 @@ MegaHitOutput is a reference to a hash where the following keys are defined:
     }
 }
  
+
+
+=head2 exec_megahit
+
+  $output = $obj->exec_megahit($params)
+
+=over 4
+
+=item Parameter and return types
+
+=begin html
+
+<pre>
+$params is a MEGAHIT.ExecMegaHitParams
+$output is a MEGAHIT.ExecMegaHitOutput
+ExecMegaHitParams is a reference to a hash where the following keys are defined:
+	workspace_name has a value which is a string
+	input_reads_name has a value which is a string
+	output_contigset_name has a value which is a string
+	combined_assembly_flag has a value which is an int
+	megahit_parameter_preset has a value which is a string
+	min_count has a value which is an int
+	k_min has a value which is an int
+	k_max has a value which is an int
+	k_step has a value which is an int
+	k_list has a value which is a reference to a list where each element is an int
+	min_contig_len has a value which is an int
+ExecMegaHitOutput is a reference to a hash where the following keys are defined:
+	output_contigset_ref has a value which is a string
+
+</pre>
+
+=end html
+
+=begin text
+
+$params is a MEGAHIT.ExecMegaHitParams
+$output is a MEGAHIT.ExecMegaHitOutput
+ExecMegaHitParams is a reference to a hash where the following keys are defined:
+	workspace_name has a value which is a string
+	input_reads_name has a value which is a string
+	output_contigset_name has a value which is a string
+	combined_assembly_flag has a value which is an int
+	megahit_parameter_preset has a value which is a string
+	min_count has a value which is an int
+	k_min has a value which is an int
+	k_max has a value which is an int
+	k_step has a value which is an int
+	k_list has a value which is a reference to a list where each element is an int
+	min_contig_len has a value which is an int
+ExecMegaHitOutput is a reference to a hash where the following keys are defined:
+	output_contigset_ref has a value which is a string
+
+
+=end text
+
+=item Description
+
+
+
+=back
+
+=cut
+
+ sub exec_megahit
+{
+    my($self, @args) = @_;
+
+# Authentication: required
+
+    if ((my $n = @args) != 1)
+    {
+	Bio::KBase::Exceptions::ArgumentValidationError->throw(error =>
+							       "Invalid argument count for function exec_megahit (received $n, expecting 1)");
+    }
+    {
+	my($params) = @args;
+
+	my @_bad_arguments;
+        (ref($params) eq 'HASH') or push(@_bad_arguments, "Invalid type for argument 1 \"params\" (value was \"$params\")");
+        if (@_bad_arguments) {
+	    my $msg = "Invalid arguments passed to exec_megahit:\n" . join("", map { "\t$_\n" } @_bad_arguments);
+	    Bio::KBase::Exceptions::ArgumentValidationError->throw(error => $msg,
+								   method_name => 'exec_megahit');
+	}
+    }
+
+    my $url = $self->{url};
+    my $result = $self->{client}->call($url, $self->{headers}, {
+	    method => "MEGAHIT.exec_megahit",
+	    params => \@args,
+    });
+    if ($result) {
+	if ($result->is_error) {
+	    Bio::KBase::Exceptions::JSONRPC->throw(error => $result->error_message,
+					       code => $result->content->{error}->{code},
+					       method_name => 'exec_megahit',
+					       data => $result->content->{error}->{error} # JSON::RPC::ReturnObject only supports JSONRPC 1.1 or 1.O
+					      );
+	} else {
+	    return wantarray ? @{$result->result} : $result->result->[0];
+	}
+    } else {
+        Bio::KBase::Exceptions::HTTP->throw(error => "Error invoking method exec_megahit",
+					    status_line => $self->{client}->status_line,
+					    method_name => 'exec_megahit',
+				       );
+    }
+}
+ 
   
 sub status
 {
@@ -260,16 +372,16 @@ sub version {
             Bio::KBase::Exceptions::JSONRPC->throw(
                 error => $result->error_message,
                 code => $result->content->{code},
-                method_name => 'run_megahit',
+                method_name => 'exec_megahit',
             );
         } else {
             return wantarray ? @{$result->result} : $result->result->[0];
         }
     } else {
         Bio::KBase::Exceptions::HTTP->throw(
-            error => "Error invoking method run_megahit",
+            error => "Error invoking method exec_megahit",
             status_line => $self->{client}->status_line,
-            method_name => 'run_megahit',
+            method_name => 'exec_megahit',
         );
     }
 }
@@ -314,43 +426,51 @@ sub _validate_version {
 
 =item Description
 
-Run MEGAHIT.  Most parameters here are just passed forward to MEGAHIT
+run_megahit()
 
-workspace_name - the name of the workspace for input/output
-read_library_name - the name of the PE read library (SE library support in the future)
-output_contig_set_name - the name of the output contigset
+            Run MEGAHIT.  Most parameters here are just passed forward to MEGAHIT
 
-megahit_parameter_preset - 
-        override a group of parameters; possible values:
-            meta            '--min-count 2 --k-list 21,41,61,81,99'
-            (generic metagenomes, default)
-            meta-sensitive  '--min-count 2 --k-list 21,31,41,51,61,71,81,91,99'
-            (more sensitive but slower)
-            meta-large      '--min-count 2 --k-list 27,37,47,57,67,77,87'
-            (large & complex metagenomes, like soil)
-            bulk            '--min-count 3 --k-list 31,51,71,91,99 --no-mercy'
-            (experimental, standard bulk sequencing with >= 30x depth)
-            single-cell     '--min-count 3 --k-list 21,33,55,77,99,121 --merge_level 20,0.96'
-            (experimental, single cell data)
+            run_megahit() is responsible for accepting input params from Narrative, 
+                calling exec_megahit(), and generating report.  
+                It mediates communication with the Narrative
 
-min_count - minimum multiplicity for filtering (k_min+1)-mers, default 2
+            workspace_name - the name of the workspace for input/output
+            read_library_name - the name of the PE read library (SE library support in the future)
+            output_contig_set_name - the base name of the output contigset or AssemblySet
 
-            min_k - minimum kmer size (<= 127), must be odd number, default 21
-            max_k - maximum kmer size (<= 127), must be odd number, default 99
-        k_step - increment of kmer size of each iteration (<= 28), must be even number, default 10
+            combined_assembly_flag - if input is a ReadsSet, indicate combined Assembly
 
-        k_list - list of kmer size (all must be odd, in the range 15-127, increment <= 28);
- override `--k-min', `--k-max' and `--k-step'
+            megahit_parameter_preset - override a group of parameters; possible values:
+                
+                meta            '--min-count 2 --k-list 21,41,61,81,99'
+                                (generic metagenomes, default)
+                meta-sensitive  '--min-count 2 --k-list 21,31,41,51,61,71,81,91,99'
+                                 (more sensitive but slower)
+                meta-large      '--min-count 2 --k-list 27,37,47,57,67,77,87'
+                                (large & complex metagenomes, like soil)
+                bulk            '--min-count 3 --k-list 31,51,71,91,99 --no-mercy'
+                                (experimental, standard bulk sequencing with >= 30x depth)
+                single-cell     '--min-count 3 --k-list 21,33,55,77,99,121 --merge_level 20,0.96'
+                                (experimental, single cell data)
 
-min_contig_length - minimum length of contigs to output, default 200
+             min_count - minimum multiplicity for filtering (k_min+1)-mers, default 2
 
-@optional megahit_parameter_preset
-@optional min_count
-@optional k_min
-@optional k_max
-@optional k_step
-@optional k_list
-@optional min_contig_len
+                 min_k - minimum kmer size (<= 127), must be odd number, default 21
+                 max_k - maximum kmer size (<= 127), must be odd number, default 99
+             k_step - increment of kmer size of each iteration (<= 28), must be even number, default 10
+             
+             k_list - list of kmer size (all must be odd, in the range 15-127, increment <= 28);
+                 overrides '--k-min', '--k-max', and '--k-step'
+
+             min_contig_length - minimum length of contigs to output, default 200
+
+             @optional megahit_parameter_preset
+             @optional min_count
+             @optional k_min
+             @optional k_max
+             @optional k_step
+             @optional k_list
+             @optional min_contig_len
 
 
 =item Definition
@@ -360,8 +480,9 @@ min_contig_length - minimum length of contigs to output, default 200
 <pre>
 a reference to a hash where the following keys are defined:
 workspace_name has a value which is a string
-read_library_name has a value which is a string
+input_reads_name has a value which is a string
 output_contigset_name has a value which is a string
+combined_assembly_flag has a value which is an int
 megahit_parameter_preset has a value which is a string
 min_count has a value which is an int
 k_min has a value which is an int
@@ -378,8 +499,9 @@ min_contig_len has a value which is an int
 
 a reference to a hash where the following keys are defined:
 workspace_name has a value which is a string
-read_library_name has a value which is a string
+input_reads_name has a value which is a string
 output_contigset_name has a value which is a string
+combined_assembly_flag has a value which is an int
 megahit_parameter_preset has a value which is a string
 min_count has a value which is an int
 k_min has a value which is an int
@@ -419,6 +541,100 @@ report_ref has a value which is a string
 a reference to a hash where the following keys are defined:
 report_name has a value which is a string
 report_ref has a value which is a string
+
+
+=end text
+
+=back
+
+
+
+=head2 ExecMegaHitParams
+
+=over 4
+
+
+
+=item Description
+
+exec_megahit()
+
+            Actual execution of MEGAHIT
+
+            Accepts ReadsSet or a ReadsLibrary as Input
+
+            Creates Assembly object(s) as output.
+            Will eventually also create AssemblySet object if input is a ReadsSet and not running a combined assembly
+        
+            Other vars same as run_megahit()
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a reference to a hash where the following keys are defined:
+workspace_name has a value which is a string
+input_reads_name has a value which is a string
+output_contigset_name has a value which is a string
+combined_assembly_flag has a value which is an int
+megahit_parameter_preset has a value which is a string
+min_count has a value which is an int
+k_min has a value which is an int
+k_max has a value which is an int
+k_step has a value which is an int
+k_list has a value which is a reference to a list where each element is an int
+min_contig_len has a value which is an int
+
+</pre>
+
+=end html
+
+=begin text
+
+a reference to a hash where the following keys are defined:
+workspace_name has a value which is a string
+input_reads_name has a value which is a string
+output_contigset_name has a value which is a string
+combined_assembly_flag has a value which is an int
+megahit_parameter_preset has a value which is a string
+min_count has a value which is an int
+k_min has a value which is an int
+k_max has a value which is an int
+k_step has a value which is an int
+k_list has a value which is a reference to a list where each element is an int
+min_contig_len has a value which is an int
+
+
+=end text
+
+=back
+
+
+
+=head2 ExecMegaHitOutput
+
+=over 4
+
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a reference to a hash where the following keys are defined:
+output_contigset_ref has a value which is a string
+
+</pre>
+
+=end html
+
+=begin text
+
+a reference to a hash where the following keys are defined:
+output_contigset_ref has a value which is a string
 
 
 =end text

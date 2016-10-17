@@ -41,6 +41,19 @@ public class MEGAHITClient {
         caller = new JsonClientCaller(url, token);
     }
 
+    /** Constructs a client with a custom URL
+     * and a custom authorization service URL.
+     * @param url the URL of the service.
+     * @param token the user's authorization token.
+     * @param auth the URL of the authorization server.
+     * @throws UnauthorizedException if the token is not valid.
+     * @throws IOException if an IOException occurs when checking the token's
+     * validity.
+     */
+    public MEGAHITClient(URL url, AuthToken token, URL auth) throws UnauthorizedException, IOException {
+        caller = new JsonClientCaller(url, token, auth);
+    }
+
     /** Constructs a client with a custom URL.
      * @param url the URL of the service.
      * @param user the user name.
@@ -176,6 +189,23 @@ public class MEGAHITClient {
         args.add(params);
         TypeReference<List<MegaHitOutput>> retType = new TypeReference<List<MegaHitOutput>>() {};
         List<MegaHitOutput> res = caller.jsonrpcCall("MEGAHIT.run_megahit", args, retType, true, true, jsonRpcContext, this.serviceVersion);
+        return res.get(0);
+    }
+
+    /**
+     * <p>Original spec-file function name: exec_megahit</p>
+     * <pre>
+     * </pre>
+     * @param   params   instance of type {@link us.kbase.megahit.ExecMegaHitParams ExecMegaHitParams}
+     * @return   parameter "output" of type {@link us.kbase.megahit.ExecMegaHitOutput ExecMegaHitOutput}
+     * @throws IOException if an IO exception occurs
+     * @throws JsonClientException if a JSON RPC exception occurs
+     */
+    public ExecMegaHitOutput execMegahit(ExecMegaHitParams params, RpcContext... jsonRpcContext) throws IOException, JsonClientException {
+        List<Object> args = new ArrayList<Object>();
+        args.add(params);
+        TypeReference<List<ExecMegaHitOutput>> retType = new TypeReference<List<ExecMegaHitOutput>>() {};
+        List<ExecMegaHitOutput> res = caller.jsonrpcCall("MEGAHIT.exec_megahit", args, retType, true, true, jsonRpcContext, this.serviceVersion);
         return res.get(0);
     }
 
