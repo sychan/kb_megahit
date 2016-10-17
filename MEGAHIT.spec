@@ -103,8 +103,8 @@ module MEGAHIT {
 	} ExecMegaHitParams;
 
 	typedef structure {
-	        string report_text;
-		string output_contigset_ref;
+	        string       report_text;
+		list<string> output_contigset_ref;
 	} ExecMegaHitOutput;
 
 	funcdef exec_megahit(ExecMegaHitParams params) returns (ExecMegaHitOutput output)

@@ -41,7 +41,7 @@ class MEGAHIT:
     #########################################
     VERSION = "3.0.0"
     GIT_URL = "https://github.com/dcchivian/kb_megahit"
-    GIT_COMMIT_HASH = "0b0d070dee2c5fb5910c29b606dcfe7baa0e25fb"
+    GIT_COMMIT_HASH = "65ba90c23d196a862d74cbc065bef79b44715882"
     
     #BEGIN_CLASS_HEADER
     MEGAHIT = '/kb/module/megahit/megahit'
@@ -137,7 +137,6 @@ class MEGAHIT:
         return output_contigs
 
     #END_CLASS_HEADER
-
 
     # config contains contents of config file in a hash or None if it couldn't
     # be found
@@ -272,7 +271,8 @@ class MEGAHIT:
            parameter "k_step" of Long, parameter "k_list" of list of Long,
            parameter "min_contig_len" of Long
         :returns: instance of type "ExecMegaHitOutput" -> structure:
-           parameter "output_contigset_ref" of String
+           parameter "report_text" of String, parameter
+           "output_contigset_ref" of list of String
         """
         # ctx is the context object
         # return variables are: output

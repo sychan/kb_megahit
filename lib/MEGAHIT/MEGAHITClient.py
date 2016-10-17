@@ -94,7 +94,8 @@ class MEGAHIT(object):
            parameter "k_step" of Long, parameter "k_list" of list of Long,
            parameter "min_contig_len" of Long
         :returns: instance of type "ExecMegaHitOutput" -> structure:
-           parameter "output_contigset_ref" of String
+           parameter "report_text" of String, parameter
+           "output_contigset_ref" of list of String
         """
         return self._client.call_method(
             'MEGAHIT.exec_megahit',

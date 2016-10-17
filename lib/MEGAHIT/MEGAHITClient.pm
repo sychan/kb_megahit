@@ -247,7 +247,8 @@ ExecMegaHitParams is a reference to a hash where the following keys are defined:
 	k_list has a value which is a reference to a list where each element is an int
 	min_contig_len has a value which is an int
 ExecMegaHitOutput is a reference to a hash where the following keys are defined:
-	output_contigset_ref has a value which is a string
+	report_text has a value which is a string
+	output_contigset_ref has a value which is a reference to a list where each element is a string
 
 </pre>
 
@@ -270,7 +271,8 @@ ExecMegaHitParams is a reference to a hash where the following keys are defined:
 	k_list has a value which is a reference to a list where each element is an int
 	min_contig_len has a value which is an int
 ExecMegaHitOutput is a reference to a hash where the following keys are defined:
-	output_contigset_ref has a value which is a string
+	report_text has a value which is a string
+	output_contigset_ref has a value which is a reference to a list where each element is a string
 
 
 =end text
@@ -625,7 +627,8 @@ min_contig_len has a value which is an int
 
 <pre>
 a reference to a hash where the following keys are defined:
-output_contigset_ref has a value which is a string
+report_text has a value which is a string
+output_contigset_ref has a value which is a reference to a list where each element is a string
 
 </pre>
 
@@ -634,7 +637,8 @@ output_contigset_ref has a value which is a string
 =begin text
 
 a reference to a hash where the following keys are defined:
-output_contigset_ref has a value which is a string
+report_text has a value which is a string
+output_contigset_ref has a value which is a reference to a list where each element is a string
 
 
 =end text
