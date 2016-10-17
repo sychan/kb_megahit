@@ -54,9 +54,90 @@ class MEGAHIT:
         print(message)
         sys.stdout.flush()
 
+    # run megahit on the fastq files and return contig file path
+    def exec_megahit_single_library (self, params):
 
+        print('Input reads files:')
+        #fwd = reads[input_ref]['files']['fwd']
+        #rev = reads[input_ref]['files']['rev']
+# HERE
+        fwd = params['input_fwd_path']
+        rev = params['input_rev_path']
+        pprint('forward: '+fwd)
+        pprint('reverse: '+rev)
+
+
+        ### STEP 4: run megahit
+        # construct the command
+        megahit_cmd = [self.MEGAHIT]
+
+        # we only support PE reads, so add that
+        megahit_cmd.append('-1')
+        megahit_cmd.append(fwd)
+        megahit_cmd.append('-2')
+        megahit_cmd.append(rev)
+
+        # if a preset is defined, use that:
+        if 'megahit_parameter_preset' in params:
+            if params['megahit_parameter_preset']:
+                megahit_cmd.append('--presets')
+                megahit_cmd.append(params['megahit_parameter_preset'])
+
+        if 'min_count' in params:
+            if params['min_count']:
+                megahit_cmd.append('--min-count')
+                megahit_cmd.append(str(params['min_count']))
+        if 'k_min' in params:
+            if params['k_min']:
+                megahit_cmd.append('--k-min')
+                megahit_cmd.append(str(params['k_min']))
+        if 'k_max' in params:
+            if params['k_max']:
+                megahit_cmd.append('--k-max')
+                megahit_cmd.append(str(params['k_max']))
+        if 'k_step' in params:
+            if params['k_step']:
+                megahit_cmd.append('--k-step')
+                megahit_cmd.append(str(params['k_step']))
+        if 'k_list' in params:
+            if params['k_list']:
+                k_list = []
+                for k_val in params['k_list']:
+                    k_list.append(str(k_val))
+                megahit_cmd.append('--k-list')
+                megahit_cmd.append(','.join(k_list))
+        if 'min_contig_len' in params:
+            if params['min_contig_len']:
+                megahit_cmd.append('--min-contig-len')
+                megahit_cmd.append(str(params['min_contig_len']))
+
+        # set the output location
+        timestamp = int((datetime.utcnow() - datetime.utcfromtimestamp(0)).total_seconds()*1000)
+        output_dir = os.path.join(self.scratch,'output.'+str(timestamp))
+        megahit_cmd.append('-o')
+        megahit_cmd.append(output_dir)
+
+        # run megahit
+        print('running megahit:')
+        print('    '+' '.join(megahit_cmd))
+        p = subprocess.Popen(megahit_cmd, cwd=self.scratch, shell=False)
+        retcode = p.wait()
+
+        print('Return code: ' + str(retcode))
+        if p.returncode != 0:
+            raise ValueError('Error running MEGAHIT, return code: ' +
+                             str(retcode) + '\n')
+
+        output_contigs = os.path.join(output_dir, 'final.contigs.fa')
+        if self.mac_mode: # on macs, we cannot run megahit in the shared host scratch space, so we need to move the file there
+            shutil.move(output_contigs, os.path.join(self.host_scratch, 'final.contigs.fa'))
+            output_contigs = os.path.join(self.host_scratch, 'final.contigs.fa')
+
+        # send back path to contigs fasta file
+        return output_contigs
 
     #END_CLASS_HEADER
+
 
     # config contains contents of config file in a hash or None if it couldn't
     # be found
@@ -154,9 +235,12 @@ class MEGAHIT:
 
         ### STEP 3: save the report
         reportObj = {
-            'objects_created':[{'ref':exec_megahit_output['output_contigset_ref'], 'description':'Assembled contigs'}],
+            'objects_created':[],
             'text_message':exec_megahit_output['report_text']
         }
+        for obj_ref in exec_megahit_output['output_contigset_refs']:
+            reportObj['objects_created'].append({'ref':obj_ref, 'description':'Assembled contigs'})
+
         report = KBaseReport(self.callbackURL, token=ctx['token'], service_ver=SERVICE_VER)
         report_info = report.create({'report':reportObj, 'workspace_name':params['workspace_name']})
 
@@ -324,6 +408,8 @@ class MEGAHIT:
 
         ### STEP 5: finally run MEGAHIT
         exec_megahit_single_library_params = params
+        output_assemblyset_contigset_paths = []
+        output_contigset_path = None
 
         # PairedEndLibrary
         if input_reads_obj_type == "KBaseSets.PairedEndLibarary":
@@ -335,20 +421,34 @@ class MEGAHIT:
             except Exception as e:
                 raise ValueError('Unable to get reads object from workspace: (' + input_reads_ref +")\n" + str(e))
 
-            exec_megahit_single_library_params['input_fwd_file_path'] = readsLibrary['files'][input_reads_ref]['files']['fwd'])
-            exec_megahit_single_library_params['input_rev_file_path'] = readsLibrary['files'][input_reads_ref]['files']['rev'])
+            input_fwd_path = readsLibrary['files'][input_reads_ref]['files']['fwd'])
+            input_rev_path = readsLibrary['files'][input_reads_ref]['files']['rev'])
+            exec_megahit_single_library_params['input_fwd_file_path'] = input_fwd_path
+            exec_megahit_single_library_params['input_rev_file_path'] = input_rev_path
 
-            # money line
+            # the key line
             output_contigset_path = self.exec_megahit_single_library (exec_megahit_single_library_params)
+            output_assemblyset_contigset_paths.append (output_contigset_path)
+            
+            os.remove (input_fwd_path) # files can be really big
+            os.remove (input_rev_path)
 
         # ReadsSet combined (already downloaded and combined fastqs)
         elif input_reads_obj_type == "KBaseSets.ReadsSet" and params['combined_assembly_flag'] != 0:
 
-            exec_megahit_single_library_params['input_fwd_file_path'] = combined_input_fwd_path
-            exec_megahit_single_library_params['input_rev_file_path'] = combined_input_rev_path
+            input_fwd_path = combined_input_fwd_path
+            input_rev_path = combined_input_rev_path
+            exec_megahit_single_library_params['input_fwd_file_path'] = input_fwd_path
+            exec_megahit_single_library_params['input_rev_file_path'] = input_rev_path
 
-            output_contigset_path = self.exec_megahit_single_library (ctx, exec_megahit_single_library_params)
+            # the key line
+            output_contigset_path = self.exec_megahit_single_library (exec_megahit_single_library_params)
+            output_assemblyset_contigset_paths.append (output_contigset_path)
 
+            os.remove (input_fwd_path) # files can be really big
+            os.remove (input_rev_path)
+
+        # ReadsSet uncombined (still have to download)
         elif input_reads_obj_type == "KBaseSets.ReadsSet" and params['combined_assembly_flag'] == 0:
             # connect to ReadsUtils Client
             try:
@@ -366,129 +466,68 @@ class MEGAHIT:
                 except Exception as e:
                     raise ValueError('Unable to get reads object from workspace: (' + this_input_reads_ref +")\n" + str(e))
 
-                # money line
-                exec_megahit_single_library_params['input_fwd_file_path'] = readsLibrary['files'][this_input_reads_ref]['files']['fwd']
-                exec_megahit_single_library_params['input_rev_file_path'] = readsLibrary['files'][this_input_reads_ref]['files']['rev']
+                this_input_fwd_path = readsLibrary['files'][this_input_reads_ref]['files']['fwd']
+                this_input_rev_path = readsLibrary['files'][this_input_reads_ref]['files']['rev']
+                exec_megahit_single_library_params['input_fwd_file_path'] = this_input_fwd_path
+                exec_megahit_single_library_params['input_rev_file_path'] = this_input_rev_path
 
-                # money line
-                output_contigset_path = self.exec_megahit_single_library (ctx, exec_megahit_single_library_params)
-                output_assemblyset_contigset_paths.append(output_contigset_path)
+                # the key line
+                this_output_contigset_path = self.exec_megahit_single_library (exec_megahit_single_library_params)
+                output_assemblyset_contigset_paths.append (this_output_contigset_path)
+                
+                os.remove (this_input_fwd_path) # files can be really big
+                os.remove (this_input_rev_path)
 
-        else:  # confused ourselves
+        # just in case we've confused ourselves
+        else:  
             raise ValueError ("error in logic")
 
 
-
-
-
-
-
-
-        print('Input reads files:')
-        fwd = reads[input_ref]['files']['fwd']
-        rev = reads[input_ref]['files']['rev']
-        pprint('forward: '+fwd)
-        pprint('reverse: '+rev)
-
-
-        ### STEP 4: run megahit
-        # construct the command
-        megahit_cmd = [self.MEGAHIT]
-
-        # we only support PE reads, so add that
-        megahit_cmd.append('-1')
-        megahit_cmd.append(fwd)
-        megahit_cmd.append('-2')
-        megahit_cmd.append(rev)
-
-        # if a preset is defined, use that:
-        if 'megahit_parameter_preset' in params:
-            if params['megahit_parameter_preset']:
-                megahit_cmd.append('--presets')
-                megahit_cmd.append(params['megahit_parameter_preset'])
-
-        if 'min_count' in params:
-            if params['min_count']:
-                megahit_cmd.append('--min-count')
-                megahit_cmd.append(str(params['min_count']))
-        if 'k_min' in params:
-            if params['k_min']:
-                megahit_cmd.append('--k-min')
-                megahit_cmd.append(str(params['k_min']))
-        if 'k_max' in params:
-            if params['k_max']:
-                megahit_cmd.append('--k-max')
-                megahit_cmd.append(str(params['k_max']))
-        if 'k_step' in params:
-            if params['k_step']:
-                megahit_cmd.append('--k-step')
-                megahit_cmd.append(str(params['k_step']))
-        if 'k_list' in params:
-            if params['k_list']:
-                k_list = []
-                for k_val in params['k_list']:
-                    k_list.append(str(k_val))
-                megahit_cmd.append('--k-list')
-                megahit_cmd.append(','.join(k_list))
-        if 'min_contig_len' in params:
-            if params['min_contig_len']:
-                megahit_cmd.append('--min-contig-len')
-                megahit_cmd.append(str(params['min_contig_len']))
-
-        # set the output location
-        timestamp = int((datetime.utcnow() - datetime.utcfromtimestamp(0)).total_seconds()*1000)
-        output_dir = os.path.join(self.scratch,'output.'+str(timestamp))
-        megahit_cmd.append('-o')
-        megahit_cmd.append(output_dir)
-
-        # run megahit
-        print('running megahit:')
-        print('    '+' '.join(megahit_cmd))
-        p = subprocess.Popen(megahit_cmd, cwd=self.scratch, shell=False)
-        retcode = p.wait()
-
-        print('Return code: ' + str(retcode))
-        if p.returncode != 0:
-            raise ValueError('Error running MEGAHIT, return code: ' +
-                             str(retcode) + '\n')
-
-        output_contigs = os.path.join(output_dir, 'final.contigs.fa')
-        if self.mac_mode: # on macs, we cannot run megahit in the shared host scratch space, so we need to move the file there
-            shutil.move(output_contigs, os.path.join(self.host_scratch, 'final.contigs.fa'))
-            output_contigs = os.path.join(self.host_scratch, 'final.contigs.fa')
-
-
-        # STEP 4: save the resulting assembly
+        ### STEP 6: save the resulting assembly
         assemblyUtil = AssemblyUtil(self.callbackURL, token=ctx['token'], service_ver=SERVICE_VER)
-        output_data_ref = assemblyUtil.save_assembly_from_fasta(
-                                { 
-                                    'file':{'path':output_contigs},
-                                    'workspace_name':params['workspace_name'],
-                                    'assembly_name':params['output_contigset_name']
-                                })
+        output_contigset_refs = []
+        output_contigset_names = []
+        for i,this_output_contigset_path in enumerate(output_assemblyset_contigset_paths):
+            if len(output_contigset_paths) == 1:
+                assembly_name = params['output_contigset_name']
+            else:
+                assembly_name = readsSet_names_list.[i]+"_MEGAHIT_Contigs"
+
+            this_output_data_ref = assemblyUtil.save_assembly_from_fasta({ 
+                                                    'file':{'path':this_output_contigset_path},
+                                                    'workspace_name':params['workspace_name'],
+                                                    'assembly_name':assembly_name
+                                                    })
+
+            output_contigset_refs.append (this_output_data_ref)
+            output_contigset_names.append (assembly_name)
 
 
-        # STEP 5: generate the report text
+        ### STEP 7: generate the report text
 
         # compute a simple contig length distribution for the report
-        lengths = []
-        for seq_record in SeqIO.parse(output_contigs, 'fasta'):
-            lengths.append(len(seq_record.seq))
-
         report = ''
-        report += 'ContigSet saved to: '+params['workspace_name']+'/'+params['output_contigset_name']+'\n'
-        report += 'Assembled into '+str(len(lengths)) + ' contigs.\n'
-        report += 'Avg Length: '+str(sum(lengths)/float(len(lengths))) + ' bp.\n'
+        for i,this_output_contigset_path in enumerate(output_assemblyset_contigset_paths):
 
-        bins = 10
-        counts, edges = np.histogram(lengths, bins)
-        report += 'Contig Length Distribution (# of contigs -- min to max basepairs):\n'
-        for c in range(bins):
-            report += '   '+str(counts[c]) + '\t--\t' + str(edges[c]) + ' to ' + str(edges[c+1]) + ' bp\n'
+            report += 
+            lengths = []
+            for seq_record in SeqIO.parse(output_contigset, 'fasta'):
+                lengths.append(len(seq_record.seq))
 
-        # STEP 6: contruct the output to send back
+                report += 'ContigSet saved to: '+params['workspace_name']+'/'+output_contigset_names[i]+'\n'
+                report += 'Assembled into '+str(len(lengths)) + ' contigs.\n'
+                report += 'Avg Length: '+str(sum(lengths)/float(len(lengths))) + ' bp.\n'
+
+                bins = 10
+                counts, edges = np.histogram(lengths, bins)
+                report += 'Contig Length Distribution (# of contigs -- min to max basepairs):\n'
+                for c in range(bins):
+                    report += '   '+str(counts[c]) + '\t--\t' + str(edges[c]) + ' to ' + str(edges[c+1]) + ' bp\n'
+
+
+        ### STEP 8: contruct the output to send back
         output = { 'report_text': report,
-                   'output_contigset_ref': output_data_ref
+                   'output_contigset_refs': output_contigset_refs
                  }
 
         #END exec_megahit
