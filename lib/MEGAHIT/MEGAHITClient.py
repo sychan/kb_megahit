@@ -40,14 +40,14 @@ class MEGAHIT(object):
            run_megahit() is responsible for accepting input params from
            Narrative, calling exec_megahit(), and generating report. It
            mediates communication with the Narrative workspace_name - the
-           name of the workspace for input/output read_library_name - the
-           name of the PE read library (SE library support in the future)
-           output_contig_set_name - the base name of the output contigset or
-           AssemblySet combined_assembly_flag - if input is a ReadsSet,
-           indicate combined Assembly megahit_parameter_preset - override a
-           group of parameters; possible values: meta            '--min-count
-           2 --k-list 21,41,61,81,99' (generic metagenomes, default)
-           meta-sensitive  '--min-count 2 --k-list
+           name of the workspace for input/output input_reads_name - the name
+           of the PE read library or ReadsSet (SE library support in the
+           future) output_contig_set_name - the base name of the output
+           contigset or AssemblySet combined_assembly_flag - if input is a
+           ReadsSet, indicate combined Assembly megahit_parameter_preset -
+           override a group of parameters; possible values: meta           
+           '--min-count 2 --k-list 21,41,61,81,99' (generic metagenomes,
+           default) meta-sensitive  '--min-count 2 --k-list
            21,31,41,51,61,71,81,91,99' (more sensitive but slower) meta-large
            '--min-count 2 --k-list 27,37,47,57,67,77,87' (large & complex
            metagenomes, like soil) bulk            '--min-count 3 --k-list
