@@ -491,7 +491,7 @@ class MEGAHIT:
             if len(output_contigset_paths) == 1:
                 assembly_name = params['output_contigset_name']
             else:
-                assembly_name = readsSet_names_list.[i]+"_MEGAHIT_Contigs"
+                assembly_name = readsSet_names_list[i]+"_MEGAHIT_Contigs"
 
             this_output_data_ref = assemblyUtil.save_assembly_from_fasta({ 
                                                     'file':{'path':this_output_contigset_path},
