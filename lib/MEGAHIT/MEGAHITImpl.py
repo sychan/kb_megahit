@@ -41,7 +41,7 @@ class MEGAHIT:
     #########################################
     VERSION = "3.0.0"
     GIT_URL = "https://github.com/dcchivian/kb_megahit"
-    GIT_COMMIT_HASH = "24db87cb38f6eaccb58013f999560aeb49ab10b4"
+    GIT_COMMIT_HASH = "fba68b5090e01bec120218e374f1b46fed077b4e"
     
     #BEGIN_CLASS_HEADER
     MEGAHIT = '/kb/module/megahit/megahit'
@@ -421,8 +421,8 @@ class MEGAHIT:
             except Exception as e:
                 raise ValueError('Unable to get reads object from workspace: (' + input_reads_ref +")\n" + str(e))
 
-            input_fwd_path = readsLibrary['files'][input_reads_ref]['files']['fwd'])
-            input_rev_path = readsLibrary['files'][input_reads_ref]['files']['rev'])
+            input_fwd_path = readsLibrary['files'][input_reads_ref]['files']['fwd']
+            input_rev_path = readsLibrary['files'][input_reads_ref]['files']['rev']
             exec_megahit_single_library_params['input_fwd_file_path'] = input_fwd_path
             exec_megahit_single_library_params['input_rev_file_path'] = input_rev_path
 
