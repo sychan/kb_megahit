@@ -509,7 +509,9 @@ class MEGAHIT:
         report = ''
         for i,this_output_contigset_path in enumerate(output_assemblyset_contigset_paths):
 
-            report += 
+            report += "MEGAHIT run for Read Library: "+readSet_names_list[i]+"\n"
+            report += "-------------------------------------------------------------\n"
+            report += "\n"
             lengths = []
             for seq_record in SeqIO.parse(output_contigset, 'fasta'):
                 lengths.append(len(seq_record.seq))
