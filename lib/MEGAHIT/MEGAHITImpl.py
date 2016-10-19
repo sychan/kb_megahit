@@ -411,8 +411,9 @@ class MEGAHIT:
         output_assemblyset_contigset_paths = []
         output_contigset_path = None
 
+
         # PairedEndLibrary
-        if input_reads_obj_type == "KBaseFile.PairedEndLibarary":
+        if input_reads_obj_type == "KBaseFile.PairedEndLibrary":
             try:
                 readsUtils_Client = ReadsUtils (url=self.callbackURL, token=ctx['token'])  # SDK local
                 readsLibrary = readsUtils_Client.download_reads ({'read_libraries': input_reads_ref,
