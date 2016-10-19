@@ -57,10 +57,10 @@ class MEGAHIT:
     # run megahit on the fastq files and return contig file path
     def exec_megahit_single_library (self, params):
 
+        print('RUNNING MEGAHIT')
         print('Input reads files:')
         #fwd = reads[input_ref]['files']['fwd']
         #rev = reads[input_ref]['files']['rev']
-# HERE
         fwd = params['input_fwd_path']
         rev = params['input_rev_path']
         pprint('forward: '+fwd)
@@ -325,7 +325,7 @@ class MEGAHIT:
         ### STEP 3: get the list of library references
         if input_reads_obj_type == "KBaseFile.PairedEndLibrary":
             readsSet_ref_list   = [input_reads_ref]
-            readsSet_names_list = [input_reads_name]
+            readsSet_names_list = [params['input_reads_name']]
  
         elif input_reads_obj_type == "KBaseSets.ReadsSet":
             readsSet_ref_list   = []
