@@ -169,7 +169,7 @@ class MegaHitTest(unittest.TestCase):
         # run megahit
         params = {
             'workspace_name': pe_lib_info[7],
-            'read_library_name': pe_lib_info[1],
+            'input_reads_name': pe_lib_info[1],
             'megahit_parameter_preset': 'meta',
             'output_contigset_name': 'output.contigset',
             #'min_count':2,
