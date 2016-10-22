@@ -416,7 +416,7 @@ class MEGAHIT:
         if input_reads_obj_type == "KBaseFile.PairedEndLibrary":
             try:
                 readsUtils_Client = ReadsUtils (url=self.callbackURL, token=ctx['token'])  # SDK local
-                readsLibrary = readsUtils_Client.download_reads ({'read_libraries': input_reads_ref,
+                readsLibrary = readsUtils_Client.download_reads ({'read_libraries': [input_reads_ref],
                                                                   'interleaved': 'false'
                                                                   })
             except Exception as e:
@@ -424,8 +424,8 @@ class MEGAHIT:
 
             input_fwd_path = readsLibrary['files'][input_reads_ref]['files']['fwd']
             input_rev_path = readsLibrary['files'][input_reads_ref]['files']['rev']
-            exec_megahit_single_library_params['input_fwd_file_path'] = input_fwd_path
-            exec_megahit_single_library_params['input_rev_file_path'] = input_rev_path
+            exec_megahit_single_library_params['input_fwd_path'] = input_fwd_path
+            exec_megahit_single_library_params['input_rev_path'] = input_rev_path
 
             # the key line
             output_contigset_path = self.exec_megahit_single_library (exec_megahit_single_library_params)
@@ -439,8 +439,8 @@ class MEGAHIT:
 
             input_fwd_path = combined_input_fwd_path
             input_rev_path = combined_input_rev_path
-            exec_megahit_single_library_params['input_fwd_file_path'] = input_fwd_path
-            exec_megahit_single_library_params['input_rev_file_path'] = input_rev_path
+            exec_megahit_single_library_params['input_fwd_path'] = input_fwd_path
+            exec_megahit_single_library_params['input_rev_path'] = input_rev_path
 
             # the key line
             output_contigset_path = self.exec_megahit_single_library (exec_megahit_single_library_params)
@@ -469,8 +469,8 @@ class MEGAHIT:
 
                 this_input_fwd_path = readsLibrary['files'][this_input_reads_ref]['files']['fwd']
                 this_input_rev_path = readsLibrary['files'][this_input_reads_ref]['files']['rev']
-                exec_megahit_single_library_params['input_fwd_file_path'] = this_input_fwd_path
-                exec_megahit_single_library_params['input_rev_file_path'] = this_input_rev_path
+                exec_megahit_single_library_params['input_fwd_path'] = this_input_fwd_path
+                exec_megahit_single_library_params['input_rev_path'] = this_input_rev_path
 
                 # the key line
                 this_output_contigset_path = self.exec_megahit_single_library (exec_megahit_single_library_params)
@@ -489,7 +489,7 @@ class MEGAHIT:
         output_contigset_refs = []
         output_contigset_names = []
         for i,this_output_contigset_path in enumerate(output_assemblyset_contigset_paths):
-            if len(output_contigset_paths) == 1:
+            if len(output_assemblyset_contigset_paths) == 1:
                 assembly_name = params['output_contigset_name']
             else:
                 assembly_name = readsSet_names_list[i]+"_MEGAHIT_Contigs"
@@ -510,7 +510,7 @@ class MEGAHIT:
         report = ''
         for i,this_output_contigset_path in enumerate(output_assemblyset_contigset_paths):
 
-            report += "MEGAHIT run for Read Library: "+readSet_names_list[i]+"\n"
+            report += "MEGAHIT run for Read Library: "+readsSet_names_list[i]+"\n"
             report += "-------------------------------------------------------------\n"
             report += "\n"
             lengths = []
