@@ -514,7 +514,7 @@ class MEGAHIT:
             report += "-------------------------------------------------------------\n"
             report += "\n"
             lengths = []
-            for seq_record in SeqIO.parse(output_contigset, 'fasta'):
+            for seq_record in SeqIO.parse(this_output_contigset_path, 'fasta'):
                 lengths.append(len(seq_record.seq))
 
                 report += 'ContigSet saved to: '+params['workspace_name']+'/'+output_contigset_names[i]+'\n'
