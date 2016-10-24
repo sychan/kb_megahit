@@ -229,19 +229,19 @@ class MEGAHIT:
 
 
         ### STEP 2: call exec_megahit() - input params are the same, so just pass through
-        exec_megahit_output = self.exec_megahit (ctx, params)
+        exec_megahit_output = self.exec_megahit (ctx, params)[0]
 
 
         ### STEP 3: save the report
         reportObj = {
-            'objects_created':[],
-            'text_message':exec_megahit_output['report_text']
+            'objects_created': [],
+            'text_message': exec_megahit_output['report_text']
         }
         for obj_ref in exec_megahit_output['output_contigset_refs']:
             reportObj['objects_created'].append({'ref':obj_ref, 'description':'Assembled contigs'})
 
-        report = KBaseReport(self.callbackURL, token=ctx['token'], service_ver=SERVICE_VER)
-        report_info = report.create({'report':reportObj, 'workspace_name':params['workspace_name']})
+        reportClient = KBaseReport(self.callbackURL, token=ctx['token'], service_ver=SERVICE_VER)
+        report_info = reportClient.create({'report':reportObj, 'workspace_name':params['workspace_name']})
 
 
         ### STEP 4: contruct the output to send back
