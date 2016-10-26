@@ -348,8 +348,11 @@ class MegaHit_Sets:
 
         ### STEP 4: If doing a combined assembly on a ReadsSet, download reads one at a time and combine
         if input_reads_obj_type == "KBaseSets.ReadsSet" and params['combined_assembly_flag'] != 0:
-            timestamp = int((datetime.utcnow() - datetime.utcfromtimestamp(0)).total_seconds()*1000)
+
+            self.log (console, "MegaHit_Sets:run_megahit(): CREATING COMBINED INPUT FASTQ FILES")
+
             # make dir
+            timestamp = int((datetime.utcnow() - datetime.utcfromtimestamp(0)).total_seconds()*1000)
             input_dir = os.path.join(self.scratch,'input.'+str(timestamp))
             if self.mac_mode: # on macs, we cannot run megahit in the shared host scratch space, so we need to move the file there
                 input_dir = os.path.join(self.host_scratch,'input.'+str(timestamp))
@@ -372,6 +375,7 @@ class MegaHit_Sets:
 
             # add libraries, one at a time
             for this_input_reads_ref in readsSet_ref_list:
+                self.log (console, "MegaHit_Sets:run_megahit(): DOWNLOADING FASTQ FILES FOR ReadsSet member: "+str(this_input_reads_ref))
                 try:
                     readsLibrary = readsUtils_Client.download_reads ({'read_libraries': [this_input_reads_ref],
                                                                       'interleaved': 'false'
@@ -383,6 +387,7 @@ class MegaHit_Sets:
                 this_input_rev_path = readsLibrary['files'][this_input_reads_ref]['files']['rev']
 
                 # append fwd
+                self.log (console, "MegaHit_Sets:run_megahit(): APPENDING FASTQ FILES FOR ReadsSet member: "+str(this_input_reads_ref))
                 this_input_path = this_input_fwd_path
                 cat_file_handle = combined_input_fwd_handle
                 with open (this_input_path, 'r', read_buf_size) as this_input_handle:
@@ -392,7 +397,7 @@ class MegaHit_Sets:
                             cat_file_handle.write(read_data)
                         else:
                             break
-                os.remove (this_input_path)
+                os.remove (this_input_path)  # create space since we no longer need the piece file
 
                 # append rev
                 this_input_path = this_input_rev_path
@@ -404,7 +409,7 @@ class MegaHit_Sets:
                             cat_file_handle.write(read_data)
                         else:
                             break
-                os.remove (this_input_path)
+                os.remove (this_input_path)  # create space since we no longer need the piece file
 
             combined_input_fwd_handle.close()
             combined_input_rev_handle.close()
@@ -418,6 +423,7 @@ class MegaHit_Sets:
 
         # PairedEndLibrary
         if input_reads_obj_type == "KBaseFile.PairedEndLibrary":
+            self.log (console, "MegaHit_Sets:run_megahit(): DOWNLOADING FASTQ FILES FOR ReadsLibrary: "+str(this_input_reads_ref))
             try:
                 readsUtils_Client = ReadsUtils (url=self.callbackURL, token=ctx['token'])  # SDK local
                 readsLibrary = readsUtils_Client.download_reads ({'read_libraries': [input_reads_ref],
@@ -464,6 +470,7 @@ class MegaHit_Sets:
             # get libraries, one at a time, and run MegaHit_Sets
             output_assemblyset_contigset_paths = []
             for this_input_reads_ref in readsSet_ref_list:
+                self.log (console, "MegaHit_Sets:run_megahit(): DOWNLOADING FASTQ FILES FOR ReadsSet member: "+str(this_input_reads_ref))
                 try:
                     readsLibrary = readsUtils_Client.download_reads ({'read_libraries': [this_input_reads_ref],
                                                                       'interleaved': 'false'
