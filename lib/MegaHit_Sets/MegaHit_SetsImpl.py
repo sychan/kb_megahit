@@ -387,7 +387,7 @@ class MegaHit_Sets:
                 cat_file_handle = combined_input_fwd_handle
                 with open (this_input_path, 'r', read_buf_size) as this_input_handle:
                     while True:
-                        read_data = this_input_handle.read(buf_size)
+                        read_data = this_input_handle.read(read_buf_size)
                         if read_data:
                             cat_file_handle.write(read_data)
                         else:
