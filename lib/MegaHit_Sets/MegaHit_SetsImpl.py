@@ -354,7 +354,7 @@ class MegaHit_Sets:
             if self.mac_mode: # on macs, we cannot run megahit in the shared host scratch space, so we need to move the file there
                 input_dir = os.path.join(self.host_scratch,'input.'+str(timestamp))
             if not os.path.exists(input_dir):
-                os.mkdirs(input_dir)
+                os.makedirs(input_dir)
 
             # connect to ReadsUtils Client
             try:
