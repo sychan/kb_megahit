@@ -1,7 +1,7 @@
 This directory should contain any UI elements needed for your module. These come in two sections.
 
 **1. Narrative Method Specs**  
-The narrative/methods/count_contigs_in_set directory
+The narrative/methods/example_method directory
 contains the spec.json and display.yaml files that are needed for the KBase Narrative to use 
 methods in your module as a clickable KBase method. See **[INSERT LOCATION HERE]** for details
 on how to write a method spec.

@@ -1,6 +1,3 @@
 This directory should contain your module's code.
-A sample implementation file has been provided for you in
-
-```biokbase/MegaHit/Impl.py```
-
-Run `make` in the root to generate your language-specific client libraries.
+Run `make` in the root to generate your implementation files based on your typespec and the langauge directives in your Makefile.
+This will also generate all language-specific client libraries.

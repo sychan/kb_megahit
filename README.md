@@ -1,8 +1,6 @@
+[![Build Status](https://travis-ci.org/dylan/MegaHit_Sets.svg?branch=master)](https://travis-ci.org/dylan/MegaHit_Sets)
 
-# MEGAHIT
+# MegaHit_Sets
 ---
 
-KBase wrapper for MEGAHIT.
-
-https://github.com/voutcn/megahit
-
+This is the basic readme for this module. Include any usage or deployment instructions and links to other documentation here.
