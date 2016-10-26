@@ -41,7 +41,7 @@ class MegaHit_Sets:
     #########################################
     VERSION = "0.0.1"
     GIT_URL = "https://github.com/dcchivian/kb_megahit"
-    GIT_COMMIT_HASH = "0dfca8b6c93fa7d06cdc008ff8d8e608d9ff4342"
+    GIT_COMMIT_HASH = "6975e3f74d48f496328fcdbc5d79736247e3488a"
     
     #BEGIN_CLASS_HEADER
     MegaHit_Sets = '/kb/module/megahit/megahit'
