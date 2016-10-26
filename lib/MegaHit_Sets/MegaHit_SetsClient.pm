@@ -26,7 +26,7 @@ MegaHit_Sets::MegaHit_SetsClient
 =head1 DESCRIPTION
 
 
-A KBase module to wrap the MegaHit_Sets package.
+A KBase module to wrap the MEGAHIT package.
 
 
 =cut
@@ -430,7 +430,7 @@ sub _validate_version {
 
 run_megahit()
 
-            Run MegaHit_Sets.  Most parameters here are just passed forward to MegaHit_Sets
+            Run MEGAHIT.  Most parameters here are just passed forward to MEGAHIT
 
             run_megahit() is responsible for accepting input params from Narrative, 
                 calling exec_megahit(), and generating report.  
@@ -562,7 +562,7 @@ report_ref has a value which is a string
 
 exec_megahit()
 
-            Actual execution of MegaHit_Sets
+            Actual execution of MEGAHIT
 
             Accepts ReadsSet or a ReadsLibrary as Input
 

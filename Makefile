@@ -1,7 +1,7 @@
-SERVICE = megahit
-SERVICE_CAPS = MEGAHIT
-SPEC_FILE = MEGAHIT.spec
-URL = https://kbase.us/services/megahit
+SERVICE = megahit_sets
+SERVICE_CAPS = MegaHit_Sets
+SPEC_FILE = MegaHit_Sets.spec
+URL = https://kbase.us/services/megahit_sets
 DIR = $(shell pwd)
 LIB_DIR = lib
 SCRIPTS_DIR = scripts

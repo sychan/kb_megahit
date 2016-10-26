@@ -36,7 +36,7 @@ class MegaHit_Sets(object):
     def run_megahit(self, params, context=None):
         """
         :param params: instance of type "MegaHitParams" (run_megahit() Run
-           MegaHit_Sets.  Most parameters here are just passed forward to MegaHit_Sets
+           MEGAHIT.  Most parameters here are just passed forward to MEGAHIT
            run_megahit() is responsible for accepting input params from
            Narrative, calling exec_megahit(), and generating report. It
            mediates communication with the Narrative workspace_name - the
@@ -82,7 +82,7 @@ class MegaHit_Sets(object):
     def exec_megahit(self, params, context=None):
         """
         :param params: instance of type "ExecMegaHitParams" (exec_megahit()
-           Actual execution of MegaHit_Sets Accepts ReadsSet or a ReadsLibrary as
+           Actual execution of MEGAHIT Accepts ReadsSet or a ReadsLibrary as
            Input Creates Assembly object(s) as output. Will eventually also
            create AssemblySet object if input is a ReadsSet and not running a
            combined assembly Other vars same as run_megahit()) -> structure:

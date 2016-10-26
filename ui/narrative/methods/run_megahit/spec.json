@@ -159,7 +159,7 @@
 	"behavior": {
 		"service-mapping": {
 			"url": "",
-			"name": "MEGAHIT",
+			"name": "MegaHit_Sets",
 			"method": "run_megahit",
 			"input_mapping": [
 				{
