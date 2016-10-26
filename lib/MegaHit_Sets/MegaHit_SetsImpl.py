@@ -363,6 +363,7 @@ class MegaHit_Sets:
                 raise ValueError("Unable to get readsUtils_Client\n" + str(e))
 
             # start combined file
+            read_buf_size  = 65536
             write_buf_size = 65536
             combined_input_fwd_path = os.path.join (input_dir, 'input_reads_fwd.fastq')
             combined_input_rev_path = os.path.join (input_dir, 'input_reads_rev.fastq')
