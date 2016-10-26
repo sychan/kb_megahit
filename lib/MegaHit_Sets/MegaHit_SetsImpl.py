@@ -349,9 +349,12 @@ class MegaHit_Sets:
         ### STEP 4: If doing a combined assembly on a ReadsSet, download reads one at a time and combine
         if input_reads_obj_type == "KBaseSets.ReadsSet" and params['combined_assembly_flag'] != 0:
             timestamp = int((datetime.utcnow() - datetime.utcfromtimestamp(0)).total_seconds()*1000)
+            # make dir
             input_dir = os.path.join(self.scratch,'input.'+str(timestamp))
             if self.mac_mode: # on macs, we cannot run megahit in the shared host scratch space, so we need to move the file there
                 input_dir = os.path.join(self.host_scratch,'input.'+str(timestamp))
+            if not os.path.exists(input_dir):
+                os.mkdirs(input_dir)
 
             # connect to ReadsUtils Client
             try:
