@@ -2,7 +2,7 @@
 A KBase module to wrap the MEGAHIT package.
 */
 
-module MEGAHIT {
+module MegaHit_Sets {
 
 	/* run_megahit()
 
