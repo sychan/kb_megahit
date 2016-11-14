@@ -168,45 +168,44 @@
 				},
 				{
 					"input_parameter": "input_reads_ref",
-          			"target_property": "input_reads_ref",
-          			"target_type_transform": "resolved-ref",
-
+          				"target_property": "input_reads_ref",
+          				"target_type_transform": "resolved-ref"
 				},
 				{
 					"input_parameter": "output_contigset_name",
-          			"target_property": "output_contigset_name"
+          				"target_property": "output_contigset_name"
 				},
 				{
 					"input_parameter": "combined_assembly_flag",
-          			"target_property": "combined_assembly_flag"
+          				"target_property": "combined_assembly_flag"
 				},
 				{
 					"input_parameter": "megahit_parameter_preset",
-          			"target_property": "megahit_parameter_preset"
+          				"target_property": "megahit_parameter_preset"
 				},
 				{
 					"input_parameter": "min_count",
-          			"target_property": "min_count"
+          				"target_property": "min_count"
 				},
 				{
 					"input_parameter": "k_min",
-          			"target_property": "k_min"
+          				"target_property": "k_min"
 				},
 				{
 					"input_parameter": "k_max",
-          			"target_property": "k_max"
+          				"target_property": "k_max"
 				},
 				{
 					"input_parameter": "k_step",
-          			"target_property": "k_step"
+          				"target_property": "k_step"
 				},
 				{
 					"input_parameter": "k_list",
-          			"target_property": "k_list"
+          				"target_property": "k_list"
 				},
 				{
 					"input_parameter": "min_contig_len",
-          			"target_property": "min_contig_len"
+          				"target_property": "min_contig_len"
 				}
 			],
 			"output_mapping": [
