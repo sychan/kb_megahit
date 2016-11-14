@@ -27,7 +27,7 @@ suggestions:
 # Configure the display and description of parameters
 #
 parameters :
-    input_reads_name :
+    input_reads_ref :
         ui-name : Input Reads
         short-hint : Read library (only PairedEnd Libs currently supported) or ReadsSet (PairedEnd)
     output_contigset_name:

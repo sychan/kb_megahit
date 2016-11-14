@@ -13,7 +13,7 @@ module MegaHit_Sets {
 		It mediates communication with the Narrative
 
 	    workspace_name - the name of the workspace for input/output
-	    input_reads_name - the name of the PE read library or ReadsSet
+	    input_reads_ref - the ref to the PE read library or ReadsSet
 	                       (SE library support in the future)
 	    output_contig_set_name - the base name of the output contigset or AssemblySet
 
@@ -53,7 +53,7 @@ module MegaHit_Sets {
 	*/
 	typedef structure {
 		string workspace_name;
-		string input_reads_name;
+		string input_reads_ref;
 		string output_contigset_name;
 		int combined_assembly_flag;  /* 1=True, 0=False, def: 1 */
 		string megahit_parameter_preset;
@@ -88,7 +88,7 @@ module MegaHit_Sets {
 	*/
 	typedef structure {
 		string workspace_name;
-		string input_reads_name;
+		string input_reads_ref;
 		string output_contigset_name;
 		int combined_assembly_flag;  /* 1=True, 0=False, def: 1 */
 		string megahit_parameter_preset;
