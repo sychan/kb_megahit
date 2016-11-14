@@ -124,7 +124,7 @@ $params is a MegaHit_Sets.MegaHitParams
 $output is a MegaHit_Sets.MegaHitOutput
 MegaHitParams is a reference to a hash where the following keys are defined:
 	workspace_name has a value which is a string
-	input_reads_name has a value which is a string
+	input_reads_ref has a value which is a string
 	output_contigset_name has a value which is a string
 	combined_assembly_flag has a value which is an int
 	megahit_parameter_preset has a value which is a string
@@ -148,7 +148,7 @@ $params is a MegaHit_Sets.MegaHitParams
 $output is a MegaHit_Sets.MegaHitOutput
 MegaHitParams is a reference to a hash where the following keys are defined:
 	workspace_name has a value which is a string
-	input_reads_name has a value which is a string
+	input_reads_ref has a value which is a string
 	output_contigset_name has a value which is a string
 	combined_assembly_flag has a value which is an int
 	megahit_parameter_preset has a value which is a string
@@ -236,7 +236,7 @@ $params is a MegaHit_Sets.ExecMegaHitParams
 $output is a MegaHit_Sets.ExecMegaHitOutput
 ExecMegaHitParams is a reference to a hash where the following keys are defined:
 	workspace_name has a value which is a string
-	input_reads_name has a value which is a string
+	input_reads_ref has a value which is a string
 	output_contigset_name has a value which is a string
 	combined_assembly_flag has a value which is an int
 	megahit_parameter_preset has a value which is a string
@@ -260,7 +260,7 @@ $params is a MegaHit_Sets.ExecMegaHitParams
 $output is a MegaHit_Sets.ExecMegaHitOutput
 ExecMegaHitParams is a reference to a hash where the following keys are defined:
 	workspace_name has a value which is a string
-	input_reads_name has a value which is a string
+	input_reads_ref has a value which is a string
 	output_contigset_name has a value which is a string
 	combined_assembly_flag has a value which is an int
 	megahit_parameter_preset has a value which is a string
@@ -437,7 +437,7 @@ run_megahit()
                 It mediates communication with the Narrative
 
             workspace_name - the name of the workspace for input/output
-            input_reads_name - the name of the PE read library or ReadsSet
+            input_reads_ref - the ref to the PE read library or ReadsSet
                                (SE library support in the future)
             output_contig_set_name - the base name of the output contigset or AssemblySet
 
@@ -483,7 +483,7 @@ run_megahit()
 <pre>
 a reference to a hash where the following keys are defined:
 workspace_name has a value which is a string
-input_reads_name has a value which is a string
+input_reads_ref has a value which is a string
 output_contigset_name has a value which is a string
 combined_assembly_flag has a value which is an int
 megahit_parameter_preset has a value which is a string
@@ -502,7 +502,7 @@ min_contig_len has a value which is an int
 
 a reference to a hash where the following keys are defined:
 workspace_name has a value which is a string
-input_reads_name has a value which is a string
+input_reads_ref has a value which is a string
 output_contigset_name has a value which is a string
 combined_assembly_flag has a value which is an int
 megahit_parameter_preset has a value which is a string
@@ -579,7 +579,7 @@ exec_megahit()
 <pre>
 a reference to a hash where the following keys are defined:
 workspace_name has a value which is a string
-input_reads_name has a value which is a string
+input_reads_ref has a value which is a string
 output_contigset_name has a value which is a string
 combined_assembly_flag has a value which is an int
 megahit_parameter_preset has a value which is a string
@@ -598,7 +598,7 @@ min_contig_len has a value which is an int
 
 a reference to a hash where the following keys are defined:
 workspace_name has a value which is a string
-input_reads_name has a value which is a string
+input_reads_ref has a value which is a string
 output_contigset_name has a value which is a string
 combined_assembly_flag has a value which is an int
 megahit_parameter_preset has a value which is a string

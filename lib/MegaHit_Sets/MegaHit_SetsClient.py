@@ -40,8 +40,8 @@ class MegaHit_Sets(object):
            run_megahit() is responsible for accepting input params from
            Narrative, calling exec_megahit(), and generating report. It
            mediates communication with the Narrative workspace_name - the
-           name of the workspace for input/output input_reads_name - the name
-           of the PE read library or ReadsSet (SE library support in the
+           name of the workspace for input/output input_reads_ref - the ref
+           to the PE read library or ReadsSet (SE library support in the
            future) output_contig_set_name - the base name of the output
            contigset or AssemblySet combined_assembly_flag - if input is a
            ReadsSet, indicate combined Assembly megahit_parameter_preset -
@@ -65,7 +65,7 @@ class MegaHit_Sets(object):
            200 @optional megahit_parameter_preset @optional min_count
            @optional k_min @optional k_max @optional k_step @optional k_list
            @optional min_contig_len) -> structure: parameter "workspace_name"
-           of String, parameter "input_reads_name" of String, parameter
+           of String, parameter "input_reads_ref" of String, parameter
            "output_contigset_name" of String, parameter
            "combined_assembly_flag" of Long, parameter
            "megahit_parameter_preset" of String, parameter "min_count" of
@@ -86,7 +86,7 @@ class MegaHit_Sets(object):
            Input Creates Assembly object(s) as output. Will eventually also
            create AssemblySet object if input is a ReadsSet and not running a
            combined assembly Other vars same as run_megahit()) -> structure:
-           parameter "workspace_name" of String, parameter "input_reads_name"
+           parameter "workspace_name" of String, parameter "input_reads_ref"
            of String, parameter "output_contigset_name" of String, parameter
            "combined_assembly_flag" of Long, parameter
            "megahit_parameter_preset" of String, parameter "min_count" of
