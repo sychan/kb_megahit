@@ -212,7 +212,8 @@ class MegaHit_Sets:
         # return variables are: output
         #BEGIN run_megahit
 
-        SERVICE_VER = 'dev'
+        #SERVICE_VER = 'dev'  # DEBUG
+        SERVICE_VER = 'release'
 
         print('Running run_megahit with params=')
         pprint(params)
@@ -278,7 +279,8 @@ class MegaHit_Sets:
         # return variables are: output
         #BEGIN exec_megahit
 
-        SERVICE_VER = 'dev'
+        #SERVICE_VER = 'dev'  # DEBUG
+        SERVICE_VER = 'release'
 
         print('Running exec_megahit with params=')
         pprint(params)
