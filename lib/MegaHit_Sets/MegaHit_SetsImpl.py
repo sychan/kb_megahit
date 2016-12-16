@@ -211,13 +211,13 @@ class MegaHit_Sets:
         # ctx is the context object
         # return variables are: output
         #BEGIN run_megahit
+        console = []
+        self.log(console, 'Running run_megahit() with params=')
+        self.log(console, "\n"+pformat(params))
+
 
         #SERVICE_VER = 'dev'  # DEBUG
         SERVICE_VER = 'release'
-
-        print('Running run_megahit with params=')
-        pprint(params)
-
 
         ### STEP 1: basic parameter checks + parsing
         required_params = ['workspace_name',
@@ -278,12 +278,14 @@ class MegaHit_Sets:
         # ctx is the context object
         # return variables are: output
         #BEGIN exec_megahit
+        console = []
+        self.log(console, 'Running exec_megahit() with params=')
+        self.log(console, "\n"+pformat(params))
+
 
         #SERVICE_VER = 'dev'  # DEBUG
         SERVICE_VER = 'release'
 
-        print('Running exec_megahit with params=')
-        pprint(params)
 
         ### STEP 0: init
         token = ctx['token']
@@ -427,7 +429,7 @@ class MegaHit_Sets:
 
         # PairedEndLibrary
         if input_reads_obj_type == "KBaseFile.PairedEndLibrary":
-            self.log (console, "MegaHit_Sets:run_megahit(): DOWNLOADING FASTQ FILES FOR ReadsLibrary: "+str(this_input_reads_ref))
+            self.log (console, "MegaHit_Sets:run_megahit(): DOWNLOADING FASTQ FILES FOR ReadsLibrary: "+str(input_reads_ref))
             try:
                 readsUtils_Client = ReadsUtils (url=self.callbackURL, token=ctx['token'])  # SDK local
                 readsLibrary = readsUtils_Client.download_reads ({'read_libraries': [input_reads_ref],
