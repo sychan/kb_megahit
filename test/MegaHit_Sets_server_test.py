@@ -113,13 +113,13 @@ class MegaHit_SetsTest(unittest.TestCase):
 
     # call this method to get the WS object info of a Paired End Library (will
     # upload the example data if this is the first time the method is called during tests)
-    def getPairedEndLibInfo(self):
+    def getPairedEndLibInfo(self, read_lib_basename):
         if hasattr(self.__class__, 'pairedEndLibInfo'):
             return self.__class__.pairedEndLibInfo
         # 1) upload files to shock
         token = self.ctx['token']
-        forward_shock_file = self.upload_file_to_shock('data/small.forward.fq')
-        reverse_shock_file = self.upload_file_to_shock('data/small.reverse.fq')
+        forward_shock_file = self.upload_file_to_shock('data/'+read_lib_basename+'.fwd.fq')
+        reverse_shock_file = self.upload_file_to_shock('data/'+read_lib_basename+'.rev.fq')
         #pprint(forward_shock_file)
         #pprint(reverse_shock_file)
 
@@ -205,7 +205,7 @@ class MegaHit_SetsTest(unittest.TestCase):
 
 
         # figure out where the test data lives
-        pe_lib_info = self.getPairedEndLibInfo()
+        pe_lib_info = self.getPairedEndLibInfo('small_1')
         pprint(pe_lib_info)
 
         # Object Info Contents
