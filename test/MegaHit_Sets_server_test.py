@@ -4,6 +4,7 @@ import os
 import json
 import time
 import requests
+requests.packages.urllib3.disable_warnings()
 
 from os import environ
 try:
