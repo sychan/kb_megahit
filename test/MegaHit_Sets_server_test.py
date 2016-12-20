@@ -64,6 +64,7 @@ class MegaHit_SetsTest(unittest.TestCase):
             print('Test workspace was deleted')
         if hasattr(cls, 'shock_ids'):
             for shock_id in cls.shock_ids:
+                print('Deleting SHOCK node: '+str(shock_id))
                 cls.delete_shock_node(shock_id)
 
     def getWsClient(self):
