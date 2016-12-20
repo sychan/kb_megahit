@@ -111,11 +111,15 @@ class MegaHit_SetsTest(unittest.TestCase):
             return result["data"]
 
 
-    # call this method to get the WS object info of a Paired End Library (will
-    # upload the example data if this is the first time the method is called during tests)
-    def getPairedEndLibInfo(self, read_lib_basename):
-        if hasattr(self.__class__, 'pairedEndLibInfo'):
-            return self.__class__.pairedEndLibInfo
+    def getPairedEndLibInfo(self, read_lib_basename, lib_i=0):
+        if hasattr(self.__class__, 'pairedEndLibInfo_list'):
+            try:
+                info = self.__class__.pairedEndLibInfo_list[lib_i]
+                if info != None:
+                    return info
+            except:
+                pass
+
         # 1) upload files to shock
         token = self.ctx['token']
         forward_shock_file = self.upload_file_to_shock('data/'+read_lib_basename+'.fwd.fq')
@@ -187,13 +191,84 @@ class MegaHit_SetsTest(unittest.TestCase):
                                     }
                                 ]
                             }]
-                        })
-        self.__class__.pairedEndLibInfo = new_obj_info[0]
-        return new_obj_info[0]
+                        })[0]
+
+        # store it
+        if not hasattr(self.__class__, 'pairedEndLibInfo_list'):
+            self.__class__.pairedEndLibInfo_list = []
+        for i in range(lib_i):
+            try:
+                assigned = self.__class__.pairedEndLibInfo_list[i]
+            except:
+                self.__class__.pairedEndLibInfo_list.append(None)
+
+        self.__class__.pairedEndLibInfo_list.append(new_obj_info)
+        return new_obj_info
+
+
+    # call this method to get the WS object info of a Paired End Library Set (will
+    # upload the example data if this is the first time the method is called during tests)
+    def getPairedEndLib_SetInfo(self, read_libs_basename_list):
+        if hasattr(self.__class__, 'pairedEndLib_SetInfo'):
+            try:
+                info = self.__class__.pairedEndLib_SetInfo
+                if info != None:
+                    return info
+            except:
+                pass
+
+        # build items and save each PairedEndLib
+        items = []
+        for lib_i,read_lib_basename in enumerate (read_libs_basename_list):
+            label    = read_lib_basename
+            lib_info = self.getPairedEndLibInfo (read_lib_basename, lib_i)
+            lib_ref  = str(lib_info[6])+'/'+str(lib_info[0])
+            print ("LIB_REF["+str(lib_i)+"]: "+lib_ref+" read_lib_basename")  # DEBUG
+
+            items.append({'ref': lib_ref,
+                          'label': label
+                          #'data_attachment': ,
+                          #'info':
+                         })
+
+        # save readsset
+        desc = 'test ReadsSet'
+        readsSet_obj = { 'description': desc,
+                         'items': items
+                       }
+        name = 'TEST_READSET'
+
+        new_obj_info = self.wsClient.save_objects({
+                        'workspace':self.getWsName(),
+                        'objects':[
+                            {
+                                'type':'KBaseSets.ReadsSet',
+                                'data':readsSet_obj,
+                                'name':name,
+                                'meta':{},
+                                'provenance':[
+                                    {
+                                        'service':'MEGAHIT',
+                                        'method':'test_megahit'
+                                    }
+                                ]
+                            }]
+                        })[0]
+
+        # store it
+        self.__class__.pairedEndLib_SetInfo = new_obj_info
+        return new_obj_info
+
+
+    ##############
+    # UNIT TESTS #
+    ##############
 
 
     # NOTE: According to Python unittest naming rules test method names should start from 'test'.
+    #
     def test_run_megahit(self):
+
         # Prepare test objects in workspace if needed using 
         # self.getWsClient().save_objects({'workspace': self.getWsName(), 'objects': []})
         #
@@ -203,6 +278,9 @@ class MegaHit_SetsTest(unittest.TestCase):
         # Check returned data with
         # self.assertEqual(ret[...], ...) or other unittest methods
 
+
+
+        ### TEST 1: run megahit against just one paired end library
 
         # figure out where the test data lives
         pe_lib_info = self.getPairedEndLibInfo('small_1')
@@ -221,13 +299,12 @@ class MegaHit_SetsTest(unittest.TestCase):
         # 9 - int size
         # 10 - usermeta meta
 
-
-        # run megahit
+        output_name = 'output_onelib.contigset'
         params = {
             'workspace_name': pe_lib_info[7],
             'input_reads_ref': str(pe_lib_info[6])+'/'+str(pe_lib_info[0]),
             'megahit_parameter_preset': 'meta',
-            'output_contigset_name': 'output.contigset',
+            'output_contigset_name': output_name
             #'min_count':2,
             #'k_min':31,
             #'k_max':51,
@@ -241,10 +318,57 @@ class MegaHit_SetsTest(unittest.TestCase):
         pprint(result)
 
         # check the output
-        info_list = self.wsClient.get_object_info([{'ref':pe_lib_info[7] + '/output.contigset'}], 1)
+        info_list = self.wsClient.get_object_info([{'ref':pe_lib_info[7] + '/' + output_name}], 1)
         self.assertEqual(len(info_list),1)
         contigset_info = info_list[0]
-        self.assertEqual(contigset_info[1],'output.contigset')
+        self.assertEqual(contigset_info[1],output_name)
+        self.assertEqual(contigset_info[2].split('-')[0],'KBaseGenomeAnnotations.Assembly')
+
+
+
+        ### TEST 2: run megahit against a reads set
+
+        # figure out where the test data lives
+        pe_lib_set_info = self.getPairedEndLib_SetInfo(['small_1','small_2'])
+        pprint(pe_lib_set_info)
+
+        # Object Info Contents
+        # 0 - obj_id objid
+        # 1 - obj_name name
+        # 2 - type_string type
+        # 3 - timestamp save_date
+        # 4 - int version
+        # 5 - username saved_by
+        # 6 - ws_id wsid
+        # 7 - ws_name workspace
+        # 8 - string chsum
+        # 9 - int size
+        # 10 - usermeta meta
+
+        output_name = 'output_readsSet.contigset'
+        params = {
+            'workspace_name': pe_lib_set_info[7],
+            'input_reads_ref': str(pe_lib_set_info[6])+'/'+str(pe_lib_set_info[0]),
+            'megahit_parameter_preset': 'meta',
+            'output_contigset_name': output_name,
+            'combined_assembly_flag': 1,
+            #'min_count':2,
+            #'k_min':31,
+            #'k_max':51,
+            #'k_step':10,
+            #'k_list':[31,41],
+            #'min_contig_length':199
+        }
+
+        result = self.getImpl().run_megahit(self.getContext(),params)
+        print('RESULT:')
+        pprint(result)
+
+        # check the output
+        info_list = self.wsClient.get_object_info([{'ref':pe_lib_set_info[7] + '/' + output_name}], 1)
+        self.assertEqual(len(info_list),1)
+        contigset_info = info_list[0]
+        self.assertEqual(contigset_info[1],output_name)
         self.assertEqual(contigset_info[2].split('-')[0],'KBaseGenomeAnnotations.Assembly')
 
         

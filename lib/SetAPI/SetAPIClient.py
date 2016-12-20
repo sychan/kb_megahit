@@ -15,6 +15,7 @@ try:
 except:
     # no they aren't
     from baseclient import BaseClient as _BaseClient  # @Reimport
+import time
 
 
 class SetAPI(object):
@@ -24,16 +25,28 @@ class SetAPI(object):
             password=None, token=None, ignore_authrc=False,
             trust_all_ssl_certificates=False,
             auth_svc='https://kbase.us/services/authorization/Sessions/Login',
-            service_ver='release'):
+            service_ver='release',
+            async_job_check_time_ms=100, async_job_check_time_scale_percent=150, 
+            async_job_check_max_time_ms=300000):
         if url is None:
-            url = 'https://kbase.us/services/service_wizard'
+            raise ValueError('A url is required')
         self._service_ver = service_ver
         self._client = _BaseClient(
             url, timeout=timeout, user_id=user_id, password=password,
             token=token, ignore_authrc=ignore_authrc,
             trust_all_ssl_certificates=trust_all_ssl_certificates,
             auth_svc=auth_svc,
-            lookup_url=True)
+            async_job_check_time_ms=async_job_check_time_ms,
+            async_job_check_time_scale_percent=async_job_check_time_scale_percent,
+            async_job_check_max_time_ms=async_job_check_max_time_ms)
+
+    def _check_job(self, job_id):
+        return self._client._check_job('SetAPI', job_id)
+
+    def _get_reads_set_v1_submit(self, params, context=None):
+        return self._client._submit_job(
+             'SetAPI.get_reads_set_v1', [params],
+             self._service_ver, context)
 
     def get_reads_set_v1(self, params, context=None):
         """
@@ -146,9 +159,22 @@ class SetAPI(object):
            key-value pairs provided by the user.) -> mapping from String to
            String
         """
-        return self._client.call_method(
-            'SetAPI.get_reads_set_v1',
-            [params], self._service_ver, context)
+        job_id = self._get_reads_set_v1_submit(params, context)
+        async_job_check_time = self._client.async_job_check_time
+        while True:
+            time.sleep(async_job_check_time)
+            async_job_check_time = (async_job_check_time *
+                self._client.async_job_check_time_scale_percent / 100.0)
+            if async_job_check_time > self._client.async_job_check_max_time:
+                async_job_check_time = self._client.async_job_check_max_time
+            job_state = self._check_job(job_id)
+            if job_state['finished']:
+                return job_state['result'][0]
+
+    def _save_reads_set_v1_submit(self, params, context=None):
+        return self._client._submit_job(
+             'SetAPI.save_reads_set_v1', [params],
+             self._service_ver, context)
 
     def save_reads_set_v1(self, params, context=None):
         """
@@ -260,9 +286,22 @@ class SetAPI(object):
            key-value pairs provided by the user.) -> mapping from String to
            String
         """
-        return self._client.call_method(
-            'SetAPI.save_reads_set_v1',
-            [params], self._service_ver, context)
+        job_id = self._save_reads_set_v1_submit(params, context)
+        async_job_check_time = self._client.async_job_check_time
+        while True:
+            time.sleep(async_job_check_time)
+            async_job_check_time = (async_job_check_time *
+                self._client.async_job_check_time_scale_percent / 100.0)
+            if async_job_check_time > self._client.async_job_check_max_time:
+                async_job_check_time = self._client.async_job_check_max_time
+            job_state = self._check_job(job_id)
+            if job_state['finished']:
+                return job_state['result'][0]
+
+    def _list_sets_submit(self, params, context=None):
+        return self._client._submit_job(
+             'SetAPI.list_sets', [params],
+             self._service_ver, context)
 
     def list_sets(self, params, context=None):
         """
@@ -367,9 +406,22 @@ class SetAPI(object):
            metadata about an object. Arbitrary key-value pairs provided by
            the user.) -> mapping from String to String
         """
-        return self._client.call_method(
-            'SetAPI.list_sets',
-            [params], self._service_ver, context)
+        job_id = self._list_sets_submit(params, context)
+        async_job_check_time = self._client.async_job_check_time
+        while True:
+            time.sleep(async_job_check_time)
+            async_job_check_time = (async_job_check_time *
+                self._client.async_job_check_time_scale_percent / 100.0)
+            if async_job_check_time > self._client.async_job_check_max_time:
+                async_job_check_time = self._client.async_job_check_max_time
+            job_state = self._check_job(job_id)
+            if job_state['finished']:
+                return job_state['result'][0]
+
+    def _get_set_items_submit(self, params, context=None):
+        return self._client._submit_job(
+             'SetAPI.get_set_items', [params],
+             self._service_ver, context)
 
     def get_set_items(self, params, context=None):
         """
@@ -475,10 +527,28 @@ class SetAPI(object):
            metadata about an object. Arbitrary key-value pairs provided by
            the user.) -> mapping from String to String
         """
-        return self._client.call_method(
-            'SetAPI.get_set_items',
-            [params], self._service_ver, context)
+        job_id = self._get_set_items_submit(params, context)
+        async_job_check_time = self._client.async_job_check_time
+        while True:
+            time.sleep(async_job_check_time)
+            async_job_check_time = (async_job_check_time *
+                self._client.async_job_check_time_scale_percent / 100.0)
+            if async_job_check_time > self._client.async_job_check_max_time:
+                async_job_check_time = self._client.async_job_check_max_time
+            job_state = self._check_job(job_id)
+            if job_state['finished']:
+                return job_state['result'][0]
 
     def status(self, context=None):
-        return self._client.call_method('SetAPI.status',
-                                        [], self._service_ver, context)
+        job_id = self._client._submit_job('SetAPI.status', 
+            [], self._service_ver, context)
+        async_job_check_time = self._client.async_job_check_time
+        while True:
+            time.sleep(async_job_check_time)
+            async_job_check_time = (async_job_check_time *
+                self._client.async_job_check_time_scale_percent / 100.0)
+            if async_job_check_time > self._client.async_job_check_max_time:
+                async_job_check_time = self._client.async_job_check_max_time
+            job_state = self._check_job(job_id)
+            if job_state['finished']:
+                return job_state['result'][0]

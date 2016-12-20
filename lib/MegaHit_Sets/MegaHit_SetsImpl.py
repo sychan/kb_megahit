@@ -17,7 +17,7 @@ from Bio import SeqIO
 
 from biokbase.workspace.client import Workspace as workspaceService
 from ReadsUtils.ReadsUtilsClient import ReadsUtils
-from SetAPI.SetAPIClient import SetAPI
+from SetAPI.SetAPIServiceClient import SetAPI
 from AssemblyUtil.AssemblyUtilClient import AssemblyUtil
 from KBaseReport.KBaseReportClient import KBaseReport
 
