@@ -112,9 +112,9 @@ class MegaHit_SetsTest(unittest.TestCase):
             raise Exception(result['error'][0])
         else:
             shock_id = result['data']['id']
-            if not hasattr(self.__class__, 'shock_ids'):
-                self.__class__.shock_ids = []
-            self.__class__.shock_ids.append(shock_id)
+            if not hasattr(cls, 'shock_ids'):
+                cls.shock_ids = []
+            cls.shock_ids.append(shock_id)
 
             return result["data"]
 
