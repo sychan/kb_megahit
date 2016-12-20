@@ -338,11 +338,11 @@ class MegaHit_Sets:
             readsSet_names_list = []
 
             try:
-                #setAPI_Client = SetAPI (url=self.serviceWizardURL, token=ctx['token'])  # for dynamic service
-                setAPI_Client = SetAPI (url=self.callbackURL, token=ctx['token'])  # SDK local method
+                setAPI_Client = SetAPI (url=self.serviceWizardURL, token=ctx['token'])  # for dynamic service
+                #setAPI_Client = SetAPI (url=self.callbackURL, token=ctx['token'])  # SDK local method
             except Exception as e:
-                #raise ValueError("SetAPI FAILURE: Unable to get SetAPI Client from serviceWizard: '"+self.serviceWizardURL+"' token: '"+ctx['token']+"'" + str(e))
-                raise ValueError("SetAPI FAILURE: Unable to get SetAPI Client as local method callbackURL: '"+self.callbackURL+"' token: '"+ctx['token']+"'" + str(e))
+                raise ValueError("SetAPI FAILURE: Unable to get SetAPI Client from serviceWizard: '"+self.serviceWizardURL+"' token: '"+ctx['token']+"'" + str(e))
+                #raise ValueError("SetAPI FAILURE: Unable to get SetAPI Client as local method callbackURL: '"+self.callbackURL+"' token: '"+ctx['token']+"'" + str(e))
 
             try:
                 input_readsSet_obj = setAPI_Client.get_reads_set_v1 ({'ref':input_reads_ref,'include_item_info':1})
