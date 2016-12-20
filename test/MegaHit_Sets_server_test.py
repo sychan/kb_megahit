@@ -267,24 +267,14 @@ class MegaHit_SetsTest(unittest.TestCase):
 
     # NOTE: According to Python unittest naming rules test method names should start from 'test'.
     #
-    def test_run_megahit(self):
-
-        # Prepare test objects in workspace if needed using 
-        # self.getWsClient().save_objects({'workspace': self.getWsName(), 'objects': []})
-        #
-        # Run your method by
-        # ret = self.getImpl().your_method(self.getContext(), parameters...)
-        #
-        # Check returned data with
-        # self.assertEqual(ret[...], ...) or other unittest methods
-
-
-
-        ### TEST 1: run megahit against just one paired end library
-
-        # figure out where the test data lives
-        pe_lib_info = self.getPairedEndLibInfo('small_1')
-        pprint(pe_lib_info)
+    # Prepare test objects in workspace if needed using 
+    # self.getWsClient().save_objects({'workspace': self.getWsName(), 'objects': []})
+    #
+    # Run your method by
+    # ret = self.getImpl().your_method(self.getContext(), parameters...)
+    #
+    # Check returned data with
+    # self.assertEqual(ret[...], ...) or other unittest methods
 
         # Object Info Contents
         # 0 - obj_id objid
@@ -298,6 +288,16 @@ class MegaHit_SetsTest(unittest.TestCase):
         # 8 - string chsum
         # 9 - int size
         # 10 - usermeta meta
+
+
+    ### TEST 1: run megahit against just one paired end library
+    #
+    def test_run_megahit(self):
+
+        # figure out where the test data lives
+        pe_lib_info = self.getPairedEndLibInfo('small_1')
+        pprint(pe_lib_info)
+
 
         output_name = 'output_onelib.contigset'
         params = {
@@ -325,8 +325,9 @@ class MegaHit_SetsTest(unittest.TestCase):
         self.assertEqual(contigset_info[2].split('-')[0],'KBaseGenomeAnnotations.Assembly')
 
 
-
-        ### TEST 2: run megahit against a reads set
+    ### TEST 2: run megahit against a reads set
+    #
+    def test_run_megahit_ReadsSet(self):
 
         # figure out where the test data lives
         pe_lib_set_info = self.getPairedEndLib_SetInfo(['small_1','small_2'])
@@ -370,5 +371,3 @@ class MegaHit_SetsTest(unittest.TestCase):
         contigset_info = info_list[0]
         self.assertEqual(contigset_info[1],output_name)
         self.assertEqual(contigset_info[2].split('-')[0],'KBaseGenomeAnnotations.Assembly')
-
-        
