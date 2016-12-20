@@ -156,6 +156,16 @@
 		    }
 		}
 	],
+	"parameter-groups": [
+		{
+		    "id" : "kmer_params",
+		    "parameters": ["min_count", "k_min", "k_max", "k_step", "k_list"],
+		    "optional" : true,
+		    "advanced" : true,
+		    "allow_multiple" : false,
+		    "with_border" : true
+		}
+	],
 	"behavior": {
 		"service-mapping": {
 			"url": "",
@@ -184,24 +194,8 @@
           				"target_property": "megahit_parameter_preset"
 				},
 				{
-					"input_parameter": "min_count",
-          				"target_property": "min_count"
-				},
-				{
-					"input_parameter": "k_min",
-          				"target_property": "k_min"
-				},
-				{
-					"input_parameter": "k_max",
-          				"target_property": "k_max"
-				},
-				{
-					"input_parameter": "k_step",
-          				"target_property": "k_step"
-				},
-				{
-					"input_parameter": "k_list",
-          				"target_property": "k_list"
+					"input_parameter": "kmer_params",
+          				"target_property": "kmer_params"
 				},
 				{
 					"input_parameter": "min_contig_len",

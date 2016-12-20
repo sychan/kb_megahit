@@ -42,14 +42,27 @@ module MegaHit_Sets {
                  overrides '--k-min', '--k-max', and '--k-step'
 
 	     min_contig_length - minimum length of contigs to output, default 200
+        */
 
-	     @optional megahit_parameter_preset
-	     @optional min_count
-	     @optional k_min
-	     @optional k_max
-	     @optional k_step
-	     @optional k_list
-	     @optional min_contig_len
+	/* Kmer Params
+	**     @optional min_count
+	**     @optional k_min
+	**     @optional k_max
+	**     @optional k_step
+	**     @optional k_list
+	*/
+	typedef structure {
+		int min_count;
+		int k_min;
+		int k_max;
+		int k_step;
+		list <int> k_list;
+	} Kmer_Params;	    
+
+	/* run_megahit()
+	**
+	**     @optional megahit_parameter_preset
+	**     @optional min_contig_len
 	*/
 	typedef structure {
 		string workspace_name;
@@ -58,12 +71,8 @@ module MegaHit_Sets {
 		int combined_assembly_flag;  /* 1=True, 0=False, def: 1 */
 		string megahit_parameter_preset;
 
-		int min_count;
-		int k_min;
-		int k_max;
-		int k_step;
-		list <int> k_list;
 		int min_contig_len;
+		Kmer_Params kmer_params;
 	} MegaHitParams;
 
 	typedef structure {

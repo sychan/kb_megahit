@@ -65,6 +65,11 @@ parameters :
         ui-name : '--min-contig-len'
         short-hint : 'minimum length of contigs to output, default 200'
 
+parameter-groups :
+    kmer_params :
+        ui-name : 'K-mer parameters'
+        short-hint : 'K-mer filtering stages'
+
 
 description : |
 	<p>This is a KBase wrapper for MEGAHIT.</p>
