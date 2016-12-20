@@ -62,6 +62,9 @@ class MegaHit_SetsTest(unittest.TestCase):
         if hasattr(cls, 'wsName'):
             cls.wsClient.delete_workspace({'workspace': cls.wsName})
             print('Test workspace was deleted')
+        if hasattr(cls, 'shock_ids'):
+            for shock_id in cls.shock_ids:
+                cls.delete_shock_node(shock_id)
 
     def getWsClient(self):
         return self.__class__.wsClient
@@ -108,7 +111,19 @@ class MegaHit_SetsTest(unittest.TestCase):
         if result['error']:
             raise Exception(result['error'][0])
         else:
+            shock_id = result['data']['id']
+            if not hasattr(self.__class__, 'shock_ids'):
+                self.__class__.shock_ids = []
+            self.__class__.shock_ids.append(shock_id)
+
             return result["data"]
+
+    @classmethod
+    def delete_shock_node(cls, node_id):
+        header = {'Authorization': 'Oauth {0}'.format(cls.token)}
+        requests.delete(cls.shockURL + '/node/' + node_id, headers=header,
+                        allow_redirects=True)
+        print('Deleted shock node ' + node_id)
 
 
     def getPairedEndLibInfo(self, read_lib_basename, lib_i=0):
