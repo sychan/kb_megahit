@@ -339,10 +339,14 @@ class MegaHit_Sets:
 
             try:
                 setAPI_Client = SetAPI (url=self.serviceWizardURL, token=ctx['token'])  # for dynamic service
+            except Exception as e:
+                raise ValueError("SetAPI FAILURE: Unable to get SetAPI Client from serviceWizard: '"+self.serviceWizardURL+"' token: '"+ctx['token']+"'" + str(e)
+            try:
                 input_readsSet_obj = setAPI_Client.get_reads_set_v1 ({'ref':input_reads_ref,'include_item_info':1})
 
             except Exception as e:
                 raise ValueError('SetAPI FAILURE: Unable to get read library set object from workspace: (' + str(input_reads_ref)+")\n" + str(e))
+
             for readsLibrary_obj in input_readsSet_obj['data']['items']:
                 readsSet_ref_list.append(readsLibrary_obj['ref'])
                 NAME_I = 1
