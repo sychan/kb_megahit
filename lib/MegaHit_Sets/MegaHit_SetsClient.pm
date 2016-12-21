@@ -128,12 +128,14 @@ MegaHitParams is a reference to a hash where the following keys are defined:
 	output_contigset_name has a value which is a string
 	combined_assembly_flag has a value which is an int
 	megahit_parameter_preset has a value which is a string
+	min_contig_len has a value which is an int
+	kmer_params has a value which is a MegaHit_Sets.Kmer_Params
+Kmer_Params is a reference to a hash where the following keys are defined:
 	min_count has a value which is an int
 	k_min has a value which is an int
 	k_max has a value which is an int
 	k_step has a value which is an int
 	k_list has a value which is a reference to a list where each element is an int
-	min_contig_len has a value which is an int
 MegaHitOutput is a reference to a hash where the following keys are defined:
 	report_name has a value which is a string
 	report_ref has a value which is a string
@@ -152,12 +154,14 @@ MegaHitParams is a reference to a hash where the following keys are defined:
 	output_contigset_name has a value which is a string
 	combined_assembly_flag has a value which is an int
 	megahit_parameter_preset has a value which is a string
+	min_contig_len has a value which is an int
+	kmer_params has a value which is a MegaHit_Sets.Kmer_Params
+Kmer_Params is a reference to a hash where the following keys are defined:
 	min_count has a value which is an int
 	k_min has a value which is an int
 	k_max has a value which is an int
 	k_step has a value which is an int
 	k_list has a value which is a reference to a list where each element is an int
-	min_contig_len has a value which is an int
 MegaHitOutput is a reference to a hash where the following keys are defined:
 	report_name has a value which is a string
 	report_ref has a value which is a string
@@ -420,6 +424,54 @@ sub _validate_version {
 
 
 
+=head2 Kmer_Params
+
+=over 4
+
+
+
+=item Description
+
+Kmer Params
+**     @optional min_count
+**     @optional k_min
+**     @optional k_max
+**     @optional k_step
+**     @optional k_list
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a reference to a hash where the following keys are defined:
+min_count has a value which is an int
+k_min has a value which is an int
+k_max has a value which is an int
+k_step has a value which is an int
+k_list has a value which is a reference to a list where each element is an int
+
+</pre>
+
+=end html
+
+=begin text
+
+a reference to a hash where the following keys are defined:
+min_count has a value which is an int
+k_min has a value which is an int
+k_max has a value which is an int
+k_step has a value which is an int
+k_list has a value which is a reference to a list where each element is an int
+
+
+=end text
+
+=back
+
+
+
 =head2 MegaHitParams
 
 =over 4
@@ -429,51 +481,9 @@ sub _validate_version {
 =item Description
 
 run_megahit()
-
-            Run MEGAHIT.  Most parameters here are just passed forward to MEGAHIT
-
-            run_megahit() is responsible for accepting input params from Narrative, 
-                calling exec_megahit(), and generating report.  
-                It mediates communication with the Narrative
-
-            workspace_name - the name of the workspace for input/output
-            input_reads_ref - the ref to the PE read library or ReadsSet
-                               (SE library support in the future)
-            output_contig_set_name - the base name of the output contigset or AssemblySet
-
-            combined_assembly_flag - if input is a ReadsSet, indicate combined Assembly
-
-            megahit_parameter_preset - override a group of parameters; possible values:
-                
-                meta            '--min-count 2 --k-list 21,41,61,81,99'
-                                (generic metagenomes, default)
-                meta-sensitive  '--min-count 2 --k-list 21,31,41,51,61,71,81,91,99'
-                                 (more sensitive but slower)
-                meta-large      '--min-count 2 --k-list 27,37,47,57,67,77,87'
-                                (large & complex metagenomes, like soil)
-                bulk            '--min-count 3 --k-list 31,51,71,91,99 --no-mercy'
-                                (experimental, standard bulk sequencing with >= 30x depth)
-                single-cell     '--min-count 3 --k-list 21,33,55,77,99,121 --merge_level 20,0.96'
-                                (experimental, single cell data)
-
-             min_count - minimum multiplicity for filtering (k_min+1)-mers, default 2
-
-                 min_k - minimum kmer size (<= 127), must be odd number, default 21
-                 max_k - maximum kmer size (<= 127), must be odd number, default 99
-             k_step - increment of kmer size of each iteration (<= 28), must be even number, default 10
-             
-             k_list - list of kmer size (all must be odd, in the range 15-127, increment <= 28);
-                 overrides '--k-min', '--k-max', and '--k-step'
-
-             min_contig_length - minimum length of contigs to output, default 200
-
-             @optional megahit_parameter_preset
-             @optional min_count
-             @optional k_min
-             @optional k_max
-             @optional k_step
-             @optional k_list
-             @optional min_contig_len
+**
+**     @optional megahit_parameter_preset
+**     @optional min_contig_len
 
 
 =item Definition
@@ -487,12 +497,8 @@ input_reads_ref has a value which is a string
 output_contigset_name has a value which is a string
 combined_assembly_flag has a value which is an int
 megahit_parameter_preset has a value which is a string
-min_count has a value which is an int
-k_min has a value which is an int
-k_max has a value which is an int
-k_step has a value which is an int
-k_list has a value which is a reference to a list where each element is an int
 min_contig_len has a value which is an int
+kmer_params has a value which is a MegaHit_Sets.Kmer_Params
 
 </pre>
 
@@ -506,12 +512,8 @@ input_reads_ref has a value which is a string
 output_contigset_name has a value which is a string
 combined_assembly_flag has a value which is an int
 megahit_parameter_preset has a value which is a string
-min_count has a value which is an int
-k_min has a value which is an int
-k_max has a value which is an int
-k_step has a value which is an int
-k_list has a value which is a reference to a list where each element is an int
 min_contig_len has a value which is an int
+kmer_params has a value which is a MegaHit_Sets.Kmer_Params
 
 
 =end text
