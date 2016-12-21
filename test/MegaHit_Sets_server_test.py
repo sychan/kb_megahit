@@ -315,18 +315,20 @@ class MegaHit_SetsTest(unittest.TestCase):
         pe_lib_info = self.getPairedEndLibInfo('small_1')
         pprint(pe_lib_info)
 
-
+        # run method
         output_name = 'output_onelib.contigset'
         params = {
             'workspace_name': pe_lib_info[7],
             'input_reads_ref': str(pe_lib_info[6])+'/'+str(pe_lib_info[0]),
             'megahit_parameter_preset': 'meta',
             'output_contigset_name': output_name
-            #'min_count':2,
-            #'k_min':31,
-            #'k_max':51,
-            #'k_step':10,
-            #'k_list':[31,41],
+            #'kmer_params': {
+                #'min_count':2,
+                #'k_min':31,
+                #'k_max':51,
+                #'k_step':10,
+                #'k_list':[31,41]
+            #    },
             #'min_contig_length':199
         }
 
@@ -350,19 +352,7 @@ class MegaHit_SetsTest(unittest.TestCase):
         pe_lib_set_info = self.getPairedEndLib_SetInfo(['small_1','small_2'])
         pprint(pe_lib_set_info)
 
-        # Object Info Contents
-        # 0 - obj_id objid
-        # 1 - obj_name name
-        # 2 - type_string type
-        # 3 - timestamp save_date
-        # 4 - int version
-        # 5 - username saved_by
-        # 6 - ws_id wsid
-        # 7 - ws_name workspace
-        # 8 - string chsum
-        # 9 - int size
-        # 10 - usermeta meta
-
+        # run method
         output_name = 'output_readsSet.contigset'
         params = {
             'workspace_name': pe_lib_set_info[7],
@@ -370,11 +360,13 @@ class MegaHit_SetsTest(unittest.TestCase):
             'megahit_parameter_preset': 'meta',
             'output_contigset_name': output_name,
             'combined_assembly_flag': 1,
-            #'min_count':2,
-            #'k_min':31,
-            #'k_max':51,
-            #'k_step':10,
-            #'k_list':[31,41],
+            #'kmer_params': {
+                #'min_count':2,
+                #'k_min':31,
+                #'k_max':51,
+                #'k_step':10,
+                #'k_list':[31,41]
+            #    },
             #'min_contig_length':199
         }
 
