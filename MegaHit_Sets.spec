@@ -86,7 +86,7 @@ module MegaHit_Sets {
 
 	/* exec_megahit()
 
-	    Actual execution of MEGAHIT
+	    Actual execution of MEGAHIT!
 
 	    Accepts ReadsSet or a ReadsLibrary as Input
 
