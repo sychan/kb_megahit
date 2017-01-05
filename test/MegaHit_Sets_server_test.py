@@ -199,7 +199,7 @@ class MegaHit_SetsTest(unittest.TestCase):
                             {
                                 'type':'KBaseFile.PairedEndLibrary',
                                 'data':paired_end_library,
-                                'name':'test.pe.reads',
+                                'name':'test-'+str(lib_i)+'.pe.reads',
                                 'meta':{},
                                 'provenance':[
                                     {
