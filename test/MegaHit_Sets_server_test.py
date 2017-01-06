@@ -311,7 +311,8 @@ class MegaHit_SetsTest(unittest.TestCase):
     #
     def test_run_megahit(self):
 
-        print ("\n\nRUNNING: test_run_megahit()\n=================================================\n\n")
+        print ("\n\nRUNNING: test_run_megahit()\n")
+        print ("===========================\n\n")
 
         # figure out where the test data lives
         pe_lib_info = self.getPairedEndLibInfo('small_1')
@@ -350,7 +351,8 @@ class MegaHit_SetsTest(unittest.TestCase):
     #
     def test_run_megahit_ReadsSet(self):
 
-        print ("\n\nRUNNING: test_run_megahit_ReadsSet()\n=================================================\n\n")
+        print ("\n\nRUNNING: test_run_megahit_ReadsSet()\n")
+        print ("====================================\n\n")
 
         # figure out where the test data lives
         pe_lib_set_info = self.getPairedEndLib_SetInfo(['small_1','small_2'])
