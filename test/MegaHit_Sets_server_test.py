@@ -311,7 +311,7 @@ class MegaHit_SetsTest(unittest.TestCase):
     #
     def test_run_megahit(self):
 
-        print ("\n\nRUNNING: test_run_megahit()\n")
+        print ("\n\nRUNNING: test_run_megahit()")
         print ("===========================\n\n")
 
         # figure out where the test data lives
@@ -351,7 +351,7 @@ class MegaHit_SetsTest(unittest.TestCase):
     #
     def test_run_megahit_ReadsSet(self):
 
-        print ("\n\nRUNNING: test_run_megahit_ReadsSet()\n")
+        print ("\n\nRUNNING: test_run_megahit_ReadsSet()")
         print ("====================================\n\n")
 
         # figure out where the test data lives
