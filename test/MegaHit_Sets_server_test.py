@@ -186,8 +186,8 @@ class MegaHit_SetsTest(unittest.TestCase):
                                 'meta':{},
                                 'provenance':[
                                     {
-                                        'service':'kb_ea_utils',
-                                        'method':'test_run_ea-utils'
+                                        'service':'MEGAHIT',
+                                        'method':'test_run_megahit'
                                     }
                                 ]
                             }]
@@ -289,8 +289,8 @@ class MegaHit_SetsTest(unittest.TestCase):
                                 'meta':{},
                                 'provenance':[
                                     {
-                                        'service':'kb_ea_utils',
-                                        'method':'test_run_ea-utils'
+                                        'service':'MEGAHIT',
+                                        'method':'test_run_megahit'
                                     }
                                 ]
                             }]
@@ -357,8 +357,8 @@ class MegaHit_SetsTest(unittest.TestCase):
                                 'meta':{},
                                 'provenance':[
                                     {
-                                        'service':'kb_ea_utils',
-                                        'method':'test_run_ea-utils'
+                                        'service':'MEGAHIT',
+                                        'method':'test_run_megahit'
                                     }
                                 ]
                             }]
@@ -414,8 +414,8 @@ class MegaHit_SetsTest(unittest.TestCase):
                                 'meta':{},
                                 'provenance':[
                                     {
-                                        'service':'kb_ea_utils',
-                                        'method':'test_run_ea-utils'
+                                        'service':'MEGAHIT',
+                                        'method':'test_run_megahit'
                                     }
                                 ]
                             }]
